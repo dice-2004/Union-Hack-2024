@@ -1,8 +1,9 @@
 import typing
 from enum import Enum
-import pygame
-from pygame.locals import *
 
+import pygame
+
+# from pygame.locals import Rect
 
 Effect = Enum("Effect", ["None", "Buttle"])
 
@@ -52,7 +53,7 @@ class Tiles:
             proc = procs[i : i + 2]
             # print(len(procs) // 2)
             # print(proc)
-            for j in range(int(proc[1])):
+            for _ in range(int(proc[1])):
                 match proc[0]:
                     case "u":
                         y -= self.size  # 画面と逆なため

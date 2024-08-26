@@ -1,10 +1,12 @@
-import pygame
-from pygame.locals import *
 import sys
 import time
-import tile
-import roulette
+
+import pygame
+from pygame.locals import K_LEFT, KEYDOWN, QUIT, Rect
+
 import player
+import roulette
+import tile
 
 SCR_RECT = Rect(0, 0, 640, 480)
 SCREEN_SIZE = (400, 300)

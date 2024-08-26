@@ -1,8 +1,4 @@
-import random
-import typing
-from enum import Enum
 import pygame
-from pygame.locals import *
 
 
 class Player(pygame.sprite.Sprite):
