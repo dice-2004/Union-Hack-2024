@@ -74,3 +74,6 @@ class Tiles:
     def draw(self, screen):
         for i in range(self.num):
             self.tiles[i].draw(screen)
+
+    def convert_pos(self, n: int) -> tuple[int, int]:
+        return (self.xs[n], self.ys[n])

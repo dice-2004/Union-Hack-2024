@@ -1,8 +1,10 @@
 import pygame
 from pygame.locals import *
 import sys
+import time
 import tile
-
+import roulette
+import player
 
 SCR_RECT = Rect(0, 0, 640, 480)
 SCREEN_SIZE = (400, 300)
@@ -21,9 +23,27 @@ class Game:
     def make_tiles(self, name, x: int, y: int, procs: str, pe1: float):
         self.tiles = tile.Tiles(name, 32, x, y, procs, pe1)
 
+    def make_roulette(self):
+        self.roulette = roulette.Roulette()
+
+    def make_player(self, name):
+        self.player = player.Player(name, 0, 0)
+
+    def next(self):
+        x = self.roulette.run()
+
+        # for debug
+        print(x)
+
+        self.player.move(
+            *self.tiles.convert_pos((self.player.nowtile + x) % self.tiles.num)
+        )
+        self.player.nowtile += x
+
     def draw(self):
         self.screen.fill((0, 0, 0))
         self.tiles.draw(self.screen)
+        self.player.draw(self.screen)
 
         pygame.display.update()  # 画面を更新
 
@@ -32,11 +52,17 @@ class Game:
             if event.type == QUIT:  # 閉じるボタンが押されたら終了
                 pygame.quit()  # Pygameの終了(画面閉じられる)
                 sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_LEFT:
+                    self.next()
+                    time.sleep(1)
 
 
 def main():
     game = Game()
     game.make_tiles("./asset/tile_basic.png", 0, 0, tile.test_proc, 0.1)
+    game.make_roulette()
+    game.make_player("./asset/pl.png")
 
     while 1:
         game.draw()
