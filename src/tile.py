@@ -1,11 +1,16 @@
+import random
 import typing
-from enum import Enum
+from enum import Enum, auto
 
 import pygame
 
 # from pygame.locals import Rect
 
-Effect = Enum("Effect", ["None", "Buttle"])
+
+class TileEffect(Enum):
+    Basic = auto()
+    Battle = auto()
+
 
 test_proc = "d4r6u4l5"
 
@@ -30,11 +35,19 @@ class Tiles:
     num: int = 0
     xs: typing.List[int] = []
     ys: typing.List[int] = []
-    effects: typing.List[Effect] = []
+    effects: typing.List[TileEffect] = []
     tiles: typing.List[Tile] = []
 
     def __init__(
-        self, name: str, size: int, x: int, y: int, procs: str, pe1: float
+        self,
+        name0: str,
+        size: int,
+        x: int,
+        y: int,
+        procs: str,
+        elist: list[TileEffect],
+        pe1: float,
+        name1: str,
     ) -> None:
         """
         size: TileSize 廃止したい
@@ -68,7 +81,13 @@ class Tiles:
                 self.num += 1
 
         for i in range(self.num):
-            self.tiles.append(Tile(name, self.xs[i], self.ys[i]))
+            seed = random.uniform(0, 1 + pe1)
+            if seed <= 1:
+                self.tiles.append(Tile(name0, self.xs[i], self.ys[i]))
+                elist.append(TileEffect.Basic)
+            elif seed <= 1 + pe1:
+                self.tiles.append(Tile(name1, self.xs[i], self.ys[i]))
+                elist.append(TileEffect.Battle)
 
     # TODO pe1の処理
 
