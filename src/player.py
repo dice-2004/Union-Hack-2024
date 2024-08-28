@@ -23,3 +23,18 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+
+
+class StatusView(pygame.sprite.Sprite):
+    def __init__(self, pl: Player, x: int, y: int):
+        self.pos = (x, y)
+        self.font = pygame.font.SysFont("arial", 16)
+        self.update(pl)
+
+    def update(self, pl: Player):
+        self.text = self.font.render(
+            f"level: {pl.lv}\nexp: {pl.exp}\nhp: {pl.hp}", True, (255, 255, 255)
+        )
+
+    def draw(self, screen):
+        screen.blit(self.text, self.pos)

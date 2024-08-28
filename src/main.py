@@ -42,6 +42,9 @@ class Game:
     def make_enemy(self):
         self.enemies = enemy.Enemies(self.tiles, enemy.default_enemycfgs)
 
+    def make_statusview(self):
+        self.statusview = player.StatusView(self.player, 300, 300)
+
     def next(self):
         x = self.roulette.run()
 
@@ -64,6 +67,7 @@ class Game:
         self.tiles.draw(self.screen)
         self.player.draw(self.screen)
         self.enemies.draw(self.screen)
+        self.statusview.draw(self.screen)
 
         pygame.display.update()  # 画面を更新
 
@@ -86,6 +90,7 @@ def main():
     game.make_player("./asset/pl.png")
     game.make_battle("./asset/battle.png")
     game.make_enemy()
+    game.make_statusview()
 
     while 1:
         game.draw()
