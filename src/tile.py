@@ -85,9 +85,11 @@ class Tiles:
             if seed <= 1:
                 self.tiles.append(Tile(name0, self.xs[i], self.ys[i]))
                 elist.append(TileEffect.Basic)
+                self.effects.append(TileEffect.Basic)
             elif seed <= 1 + pe1:
                 self.tiles.append(Tile(name1, self.xs[i], self.ys[i]))
                 elist.append(TileEffect.Battle)
+                self.effects.append(TileEffect.Battle)
 
     # TODO pe1の処理
 

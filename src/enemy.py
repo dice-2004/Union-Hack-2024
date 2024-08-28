@@ -19,7 +19,7 @@ class EnemyConfitg:
         if tag in EnemyConfitg.__defined:
             raise ValueError("the enemy tag is already defined")
         else:
-            tag.add(tag)
+            EnemyConfitg.__defined.add(tag)
 
         self.tag = tag
         self.path = path
@@ -34,8 +34,10 @@ class EnemyConfitg:
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, cfg: EnemyConfitg, x: int, y: int):
         pygame.sprite.Sprite.__init__(self)
+        print(cfg.path)
         self.image = pygame.image.load(cfg.path).convert_alpha()
         self.rect = self.image.get_rect()
+        print((x, y))
         self.rect.topleft = (x, y)
         self.direction = 0
 
@@ -48,8 +50,8 @@ class Enemy(pygame.sprite.Sprite):
 
 class Enemies:
     def __init__(self, tiles: tile.Tiles, cfgs: List[EnemyConfitg]):
-        self.enemies = List()
-        probs = List()
+        self.enemies: List[Enemy] = []
+        probs = []
 
         for i in range(len(cfgs)):
             prob = 0
@@ -57,14 +59,21 @@ class Enemies:
                 prob += cfg.prob
             probs.append(prob)
 
+        # print(probs[len(probs) - 1])
+
         for tile_index in range(tiles.num):
-            if tiles.tiles[tile_index] == tile.TileEffect.Battle:
-                seed = random.uniform(0, probs[probs(len) - 1])
+            if tiles.effects[tile_index] == tile.TileEffect.Battle:
+                seed = random.uniform(0, probs[len(probs) - 1])
                 for j in range(len(probs)):
                     if seed <= probs[j]:
                         self.enemies.append(
                             Enemy(cfgs[j], *tiles.convert_pos(tile_index))
                         )
+                        break
+
+    def draw(self, screen):
+        for enem in self.enemies:
+            enem.draw(screen)
 
 
 default_enemycfgs = [

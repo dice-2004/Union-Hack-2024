@@ -4,6 +4,7 @@ import pygame
 from pygame.locals import K_SPACE, KEYDOWN, QUIT, Rect
 
 import battle
+import enemy
 import player
 import roulette
 import tile
@@ -38,6 +39,9 @@ class Game:
     def make_battle(self, name):
         self.battle = battle.Battle(name, 200, 200)
 
+    def make_enemy(self):
+        self.enemies = enemy.Enemies(self.tiles, enemy.default_enemycfgs)
+
     def next(self):
         x = self.roulette.run()
 
@@ -59,6 +63,7 @@ class Game:
         self.screen.fill((0, 0, 0))
         self.tiles.draw(self.screen)
         self.player.draw(self.screen)
+        self.enemies.draw(self.screen)
 
         pygame.display.update()  # 画面を更新
 
@@ -80,6 +85,7 @@ def main():
     game.make_roulette()
     game.make_player("./asset/pl.png")
     game.make_battle("./asset/battle.png")
+    game.make_enemy()
 
     while 1:
         game.draw()
