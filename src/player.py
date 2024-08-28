@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.lv = 1
         self.exp = 0
         self.hp = 20
+        self.atk = 3
 
     def update(self):
         pass

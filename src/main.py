@@ -60,7 +60,9 @@ class Game:
                 pass
             case tile.TileEffect.Battle:
                 print("battle")
-                self.battle.jamp(self.screen)
+                self.battle.jamp(
+                    self.screen, self.player, self.enemies.enemies[self.player.nowtile]
+                )
 
     def draw(self):
         self.screen.fill((0, 0, 0))
@@ -72,6 +74,7 @@ class Game:
         pygame.display.update()  # 画面を更新
 
     def update(self):
+        self.statusview.update(self.player)
         for event in pygame.event.get():
             if event.type == QUIT:  # 閉じるボタンが押されたら終了
                 pygame.quit()  # Pygameの終了(画面閉じられる)

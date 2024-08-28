@@ -15,7 +15,9 @@ class EnemyTag(Enum):
 class EnemyConfitg:
     __defined = set()
 
-    def __init__(self, tag: EnemyTag, path: str, prob: float) -> None:
+    def __init__(
+        self, tag: EnemyTag, path: str, prob: float, exp: int, hp: int, atk: int
+    ) -> None:
         if tag in EnemyConfitg.__defined:
             raise ValueError("the enemy tag is already defined")
         else:
@@ -25,10 +27,10 @@ class EnemyConfitg:
         self.path = path
         self.prob = prob
 
-        # レベルをもとに自動計算予定
-        # self.exp = exp
-        # self.hp = hp
-        # self.atk = atk
+        # レベルをもとに補正予定
+        self.expbase = exp
+        self.hpbase = hp
+        self.atkbase = atk
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -40,9 +42,14 @@ class Enemy(pygame.sprite.Sprite):
         print((x, y))
         self.rect.topleft = (x, y)
         self.direction = 0
+        self.lv = 1
+        self.cfg = cfg
+        self.update()
 
     def update(self):
-        pass
+        self.exp = int(self.cfg.expbase * (self.lv * self.lv * 0.2))
+        self.hp = int(self.cfg.hpbase * (self.lv * self.lv * 0.2))
+        self.atk = int(self.cfg.atkbase * (self.lv * self.lv * 0.2))
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -50,7 +57,7 @@ class Enemy(pygame.sprite.Sprite):
 
 class Enemies:
     def __init__(self, tiles: tile.Tiles, cfgs: List[EnemyConfitg]):
-        self.enemies: List[Enemy] = []
+        self.enemies: dict[int:Enemy] = {}
         probs = []
 
         for i in range(len(cfgs)):
@@ -66,25 +73,17 @@ class Enemies:
                 seed = random.uniform(0, probs[len(probs) - 1])
                 for j in range(len(probs)):
                     if seed <= probs[j]:
-                        self.enemies.append(
-                            Enemy(cfgs[j], *tiles.convert_pos(tile_index))
+                        self.enemies[tile_index] = Enemy(
+                            cfgs[j], *tiles.convert_pos(tile_index)
                         )
                         break
 
     def draw(self, screen):
-        for enem in self.enemies:
-            enem.draw(screen)
+        for key in self.enemies.keys():
+            self.enemies[key].draw(screen)
 
 
 default_enemycfgs = [
-    EnemyConfitg(
-        EnemyTag.E1,
-        "./asset/e1.png",
-        0.1,
-    ),
-    EnemyConfitg(
-        EnemyTag.E2,
-        "./asset/e2.png",
-        0.1,
-    ),
+    EnemyConfitg(EnemyTag.E1, "./asset/e1.png", 0.1, 15, 25, 5),
+    EnemyConfitg(EnemyTag.E2, "./asset/e2.png", 0.1, 20, 10, 20),
 ]
