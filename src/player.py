@@ -9,6 +9,10 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = (x, y)
         self.direction = 0
         self.nowtile = 0
+        self.restart = 0
+        self.lv = 1
+        self.exp = 0
+        self.hp = 20
 
     def update(self):
         pass
