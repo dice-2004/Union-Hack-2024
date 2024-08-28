@@ -2,7 +2,7 @@ import pygame
 import sys
 from pygame.locals import *
 
-SCR_RECT = Rect(0, 0, 640, 480)
+SCR_RECT = Rect(0, 0, 800, 600)
 CAPTION = "test"
 
 # SAMPLE=[左上のｘ座標、左上のｙ座標、横幅、縦の幅]
@@ -24,7 +24,7 @@ COL=[255,255,255]
 
 class Title:
     def __init__(self):
-        ### 後で削除
+        ### 後で削除        # Gameで設定済み
         pygame.init()# 400 x 300の大きさの画面を作る
         pygame.display.set_caption(CAPTION)  # 画面上部に表示するタイトルを設定
         Title.screen = pygame.display.set_mode(SCR_RECT.size)
@@ -33,7 +33,7 @@ class Title:
         self.select = 0
         self.pushed_enter = 1
         self.character=pygame.image.load("./asset/pl.png")
-        # Gameで設定済み
+
     def draw(self):
         self.pushed_enter=1
         rects = [STA, CON, END]
