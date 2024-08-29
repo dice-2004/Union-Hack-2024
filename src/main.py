@@ -4,6 +4,7 @@ import pygame
 from pygame.locals import K_SPACE, KEYDOWN, QUIT, Rect
 
 import battle
+import enemy
 import player
 import roulette
 import tile
@@ -38,6 +39,12 @@ class Game:
     def make_battle(self, name):
         self.battle = battle.Battle(name, 200, 200)
 
+    def make_enemy(self):
+        self.enemies = enemy.Enemies(self.tiles, enemy.default_enemycfgs)
+
+    def make_statusview(self):
+        self.statusview = player.StatusView(self.player, 300, 300)
+
     def next(self):
         x = self.roulette.run()
 
@@ -53,16 +60,21 @@ class Game:
                 pass
             case tile.TileEffect.Battle:
                 print("battle")
-                self.battle.jamp(self.screen)
+                self.battle.jamp(
+                    self.screen, self.player, self.enemies.enemies[self.player.nowtile]
+                )
 
     def draw(self):
         self.screen.fill((0, 0, 0))
         self.tiles.draw(self.screen)
         self.player.draw(self.screen)
+        self.enemies.draw(self.screen)
+        self.statusview.draw(self.screen)
 
         pygame.display.update()  # 画面を更新
 
     def update(self):
+        self.statusview.update(self.player)
         for event in pygame.event.get():
             if event.type == QUIT:  # 閉じるボタンが押されたら終了
                 pygame.quit()  # Pygameの終了(画面閉じられる)
@@ -80,6 +92,8 @@ def main():
     game.make_roulette()
     game.make_player("./asset/pl.png")
     game.make_battle("./asset/battle.png")
+    game.make_enemy()
+    game.make_statusview()
 
     while 1:
         game.draw()

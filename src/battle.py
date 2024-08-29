@@ -4,6 +4,9 @@ import time
 import pygame
 from pygame.locals import KEYDOWN, QUIT, K_a, K_d
 
+import enemy
+import player
+
 
 class Battle(pygame.sprite.Sprite):
     def __init__(self, name, x, y):
@@ -19,8 +22,10 @@ class Battle(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-    def jamp(self, screen):
+    def jamp(self, screen, pl: player.Player, en: enemy.Enemy):
+        # エンカウント
         basetime = time.time()
+        is_timeout = True
         while basetime + 10 > time.time():
             self.draw(screen)
             pygame.display.update()  # 画面を更新
@@ -33,7 +38,31 @@ class Battle(pygame.sprite.Sprite):
                         print("escape")
                         return
                     elif event.key == K_d:
+                        is_timeout = False
                         print("attack")
-                        return
-        print("timeout-battle")
-        return
+                        break
+            else:
+                continue
+            break
+
+        # 戦闘
+        en_hp = en.hp
+
+        if not is_timeout:
+            en_hp -= pl.atk
+        else:
+            print("timeout-battle")
+        while True:
+            print(en_hp)
+            print(pl.hp)
+            if en_hp <= 0:
+                pl.exp += en.exp
+                return
+
+            pl.hp -= en.atk
+            print(f"hp:{pl.hp}")
+            if pl.hp <= 0:
+                print("dead")
+                # TODO dead
+                return
+            en_hp -= pl.atk
