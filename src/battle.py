@@ -22,7 +22,7 @@ class Battle(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-    def jamp(self, screen, pl: player.Player, en: enemy.Enemy):
+    def jamp(self, screen, pl: player.Player, en: enemy.Enemy) -> bool:
         # エンカウント
         basetime = time.time()
         is_timeout = True
@@ -36,7 +36,7 @@ class Battle(pygame.sprite.Sprite):
                 if event.type == KEYDOWN:
                     if event.key == K_a:
                         print("escape")
-                        return
+                        return True
                     elif event.key == K_d:
                         is_timeout = False
                         print("attack")
@@ -57,12 +57,12 @@ class Battle(pygame.sprite.Sprite):
             print(pl.hp)
             if en_hp <= 0:
                 pl.exp += en.exp
-                return
+                return True
 
             pl.hp -= en.atk
             print(f"hp:{pl.hp}")
             if pl.hp <= 0:
                 print("dead")
                 # TODO dead
-                return
+                return False
             en_hp -= pl.atk

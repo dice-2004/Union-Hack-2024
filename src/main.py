@@ -6,6 +6,7 @@ from pygame.locals import K_SPACE, KEYDOWN, QUIT, Rect
 import battle
 import enemy
 import player
+import reborn
 import roulette
 import tile
 
@@ -45,6 +46,10 @@ class Game:
     def make_statusview(self):
         self.statusview = player.StatusView(self.player, 300, 300)
 
+    def make_reborn(self):
+        self.is_dead = False
+        self.reborn = reborn.Reborn()
+
     def next(self):
         x = self.roulette.run()
 
@@ -60,15 +65,16 @@ class Game:
                 pass
             case tile.TileEffect.Battle:
                 print("battle")
-                self.battle.jamp(
+                self.is_dead = not self.battle.jamp(
                     self.screen, self.player, self.enemies.enemies[self.player.nowtile]
                 )
 
     def draw(self):
         self.screen.fill((0, 0, 0))
-        self.tiles.draw(self.screen)
-        self.player.draw(self.screen)
-        self.enemies.draw(self.screen)
+        if not self.is_dead:
+            self.tiles.draw(self.screen)
+            self.player.draw(self.screen)
+            self.enemies.draw(self.screen)
         self.statusview.draw(self.screen)
 
         pygame.display.update()  # 画面を更新
