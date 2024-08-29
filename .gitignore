@@ -5,6 +5,7 @@ venv/
 *.ini
 *.env
 *.log
-
-
+/src/files/savedata.json
+/src/files/error.log
+/src/test.py
 *.db
