@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = (x, y)
         self.direction = 0
         self.nowtile = 0
-        self.restart = 0
+        self.reborn = 0
         self.lv = 1
         self.exp = 0
         self.hp = 20
@@ -34,7 +34,9 @@ class StatusView(pygame.sprite.Sprite):
 
     def update(self, pl: Player):
         self.text = self.font.render(
-            f"level: {pl.lv}\nexp: {pl.exp}\nhp: {pl.hp}", True, (255, 255, 255)
+            f"level: {pl.lv}\nexp: {pl.exp}\nhp: {pl.hp}\nreborn: {pl.reborn}",
+            True,
+            (255, 255, 255),
         )
 
     def draw(self, screen):

@@ -40,7 +40,7 @@ class Game:
         self.enemies = enemy.Enemies(self.tiles, enemy.default_enemycfgs)
 
     def make_statusview(self):
-        self.statusview = player.StatusView(self.player, 300, 300)
+        self.statusview = player.StatusView(self.player, 10, 10)
 
     def make_reborn(self):
         self.is_dead = False
