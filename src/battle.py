@@ -47,16 +47,17 @@ class Battle(pygame.sprite.Sprite):
 
         # 戦闘
         en_hp = en.hp
-        print(en_hp, " ", en.lv)
+        print(int(en.exp * (pl.rebornnum + 1) * (pl.rebornnum + 1) * 0.3))
         if not is_timeout:
             en_hp -= pl.atk
         else:
             print("timeout-battle")
         while True:
             if en_hp <= 0:
-                pl.exp += en.exp
+                pl.exp += int(en.exp * (pl.rebornnum + 1) * (pl.rebornnum + 1) * 0.3)
                 en.lv += 1
                 en.update()
+                pl.lvup_check()
                 return True
 
             pl.hp -= en.atk

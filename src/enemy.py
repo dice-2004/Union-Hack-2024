@@ -84,6 +84,6 @@ class Enemies:
 
 
 default_enemycfgs = [
-    EnemyConfitg(EnemyTag.E1, "./asset/e1.png", 0.1, 15, 25, 5),
+    EnemyConfitg(EnemyTag.E1, "./asset/e1.png", 0.1, 20, 25, 5),
     # EnemyConfitg(EnemyTag.E2, "./asset/e2.png", 0.1, 20, 10, 20),
 ]

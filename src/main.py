@@ -65,6 +65,11 @@ class Game:
                     self.screen, self.player, self.enemies.enemies[self.player.nowtile]
                 )
 
+    def reborngame(self):
+        self.is_dead = False
+        self.player.reborn()
+        self.make_enemy()
+
     def draw(self):
         self.screen.fill((0, 0, 0))
         if not self.is_dead:
@@ -90,10 +95,7 @@ class Game:
             elif self.is_dead:
                 if event.type == KEYDOWN:
                     if event.key == K_r:
-                        # 転生処理 関数化予定
-                        self.is_dead = False
-                        self.player.reborn += 1
-                        self.player.nowtile = 0
+                        self.reborngame()
 
 
 def main():
