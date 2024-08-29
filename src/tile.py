@@ -18,7 +18,8 @@ test_proc = "d4r6u4l5"
 class Tile(pygame.sprite.Sprite):
     def __init__(self, name, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(name).convert_alpha()
+        image = pygame.image.load(name).convert_alpha()
+        self.image = pygame.transform.scale_by(image, 1.5)
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
         self.direction = 0

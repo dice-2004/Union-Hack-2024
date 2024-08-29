@@ -9,14 +9,19 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = (x, y)
         self.direction = 0
         self.nowtile = 0
-        self.restart = 0
+        self.rebornnum = 0
         self.lv = 1
         self.exp = 0
-        self.hp = 20
+        self.hp = 10
         self.atk = 3
 
-    def update(self):
-        pass
+    def lvup_check(self):
+        if self.lv * self.lv * 3 < self.exp:
+            self.lv += 1
+            self.exp = 0
+        self.atk = self.lv * 2 + 1
+        self.hp = self.lv * 4 + 6
+        # TODO level up scene
 
     def move(self, x: int, y: int):
         # TODO animation move_ip
@@ -24,6 +29,13 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+
+    def reborn(self):
+        self.lv = 1
+        self.exp = 0
+        self.lvup_check()
+        self.rebornnum += 1
+        self.nowtile = 0
 
 
 class StatusView(pygame.sprite.Sprite):
@@ -34,7 +46,9 @@ class StatusView(pygame.sprite.Sprite):
 
     def update(self, pl: Player):
         self.text = self.font.render(
-            f"level: {pl.lv}\nexp: {pl.exp}\nhp: {pl.hp}", True, (255, 255, 255)
+            f"level: {pl.lv}\nexp: {pl.exp}\nhp: {pl.hp}\nreborn: {pl.rebornnum}",
+            True,
+            (255, 255, 255),
         )
 
     def draw(self, screen):

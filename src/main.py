@@ -1,18 +1,20 @@
 import sys
 
 import pygame
-from pygame.locals import K_SPACE, KEYDOWN, QUIT, Rect
+
+from pygame.locals import K_SPACE, KEYDOWN, QUIT, K_r, Rect
 import json
 
 import battle
 import enemy
 import player
+import reborn
 import roulette
 import tile
 from game_title import Title
 
 SCR_RECT = Rect(0, 0, 800, 600)
-SCREEN_SIZE = (400, 300)
+
 CAPTION = "test"
 SAVEFILE="files/savedata.json"
 ERRORLOG="files/error.log"
@@ -22,16 +24,13 @@ ERRORLOG="files/error.log"
 class Game:
     def __init__(self) -> None:
         pygame.init()
-        self.screen = pygame.display.set_mode(
-            SCREEN_SIZE
-        )  # 400 x 300の大きさの画面を作る
         pygame.display.set_caption(CAPTION)  # 画面上部に表示するタイトルを設定
         self.screen = pygame.display.set_mode(SCR_RECT.size)
 
 
     def make_tiles(self, name, x: int, y: int, procs: str, pe1: float, name1: str):
         self.tile_effect = []
-        self.tiles = tile.Tiles(name, 32, x, y, procs, self.tile_effect, pe1, name1)
+        self.tiles = tile.Tiles(name, 48, x, y, procs, self.tile_effect, pe1, name1)
 
         # for debug
         print(self.tile_effect)
@@ -39,8 +38,8 @@ class Game:
     def make_roulette(self):
         self.roulette = roulette.Roulette()
 
-    def make_player(self, name):
-        self.player = player.Player(name, 0, 0)
+    def make_player(self, name, x, y):
+        self.player = player.Player(name, x, y)
 
     def make_battle(self, name):
         self.battle = battle.Battle(name, 200, 200)
@@ -49,7 +48,11 @@ class Game:
         self.enemies = enemy.Enemies(self.tiles, enemy.default_enemycfgs)
 
     def make_statusview(self):
-        self.statusview = player.StatusView(self.player, 300, 300)
+        self.statusview = player.StatusView(self.player, 10, 10)
+
+    def make_reborn(self, name: str, x: int, y: int):
+        self.is_dead = False
+        self.reborn = reborn.Reborn(name, x, y)
 
     def next(self):
         x = self.roulette.run()
@@ -66,15 +69,23 @@ class Game:
                 pass
             case tile.TileEffect.Battle:
                 print("battle")
-                self.battle.jamp(
+                self.is_dead = not self.battle.jamp(
                     self.screen, self.player, self.enemies.enemies[self.player.nowtile]
                 )
 
+    def reborngame(self):
+        self.is_dead = False
+        self.player.reborn()
+        self.make_enemy()
+
     def draw(self):
         self.screen.fill((0, 0, 0))
-        self.tiles.draw(self.screen)
-        self.player.draw(self.screen)
-        self.enemies.draw(self.screen)
+        if not self.is_dead:
+            self.tiles.draw(self.screen)
+            self.player.draw(self.screen)
+            self.enemies.draw(self.screen)
+        elif self.is_dead:
+            self.reborn.draw(self.screen)
         self.statusview.draw(self.screen)
 
         pygame.display.update()  # 画面を更新
@@ -85,9 +96,14 @@ class Game:
             if event.type == QUIT:  # 閉じるボタンが押されたら終了
                 pygame.quit()  # Pygameの終了(画面閉じられる)
                 sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_SPACE:
-                    self.next()
+            if not self.is_dead:
+                if event.type == KEYDOWN:
+                    if event.key == K_SPACE:
+                        self.next()
+            elif self.is_dead:
+                if event.type == KEYDOWN:
+                    if event.key == K_r:
+                        self.reborngame()
 
     @staticmethod
     def FILE_OPE(func):
@@ -135,13 +151,19 @@ def main():
     title=Title()
     game = Game()
     game.make_tiles(
-        "./asset/tile_basic.png", 0, 0, tile.test_proc, 0.5, "./asset/tile_battle.png"
+        "./asset/tile_basic.png",
+        0,
+        100,
+        tile.test_proc,
+        0.5,
+        "./asset/tile_battle.png",
     )
     game.make_roulette()
-    game.make_player("./asset/pl.png")
+    game.make_player("./asset/pl.png", 0, 100)
     game.make_battle("./asset/battle.png")
     game.make_enemy()
     game.make_statusview()
+    game.make_reborn("./asset/reborn.png", 0, 100)
 
     title=Title()
     while 1:
