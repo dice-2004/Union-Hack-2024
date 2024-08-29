@@ -12,7 +12,7 @@ class Player(pygame.sprite.Sprite):
         self.reborn = 0
         self.lv = 1
         self.exp = 0
-        self.hp = 20
+        self.hp = 10
         self.atk = 3
 
     def update(self):
