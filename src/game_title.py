@@ -4,6 +4,7 @@ from pygame.locals import *
 
 SCR_RECT = Rect(0, 0, 800, 600)
 CAPTION = "test"
+FONT="font/x12y16pxMaruMonica.ttf"
 
 # SAMPLE=[左上のｘ座標、左上のｙ座標、横幅、縦の幅]
 height=50
@@ -33,6 +34,7 @@ class Title:
         self.select = 0
         self.pushed_enter = 1
         self.character=pygame.image.load("./asset/pl.png")
+        pygame.font.init()
 
     def draw(self):
         self.pushed_enter=1
@@ -76,7 +78,7 @@ class Title:
                     self.pushed_enter=0
 
     def draw_text(self,siz,txt,col,sc,x,y):
-        fnt=pygame.font.SysFont("hgs明朝e",siz)
+        fnt=pygame.font.Font(FONT,siz)
         sur=fnt.render(txt,True,col)
         self.screen.blit(sur,[x,y])
 
