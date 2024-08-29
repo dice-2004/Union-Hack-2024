@@ -47,20 +47,19 @@ class Battle(pygame.sprite.Sprite):
 
         # 戦闘
         en_hp = en.hp
-
+        print(en_hp, " ", en.lv)
         if not is_timeout:
             en_hp -= pl.atk
         else:
             print("timeout-battle")
         while True:
-            print(en_hp)
-            print(pl.hp)
             if en_hp <= 0:
                 pl.exp += en.exp
+                en.lv += 1
+                en.update()
                 return True
 
             pl.hp -= en.atk
-            print(f"hp:{pl.hp}")
             if pl.hp <= 0:
                 print("dead")
                 # TODO dead

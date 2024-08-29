@@ -1,7 +1,7 @@
 import sys
 
 import pygame
-from pygame.locals import K_SPACE, KEYDOWN, QUIT, Rect
+from pygame.locals import K_SPACE, KEYDOWN, QUIT, K_r, Rect
 
 import battle
 import enemy
@@ -42,9 +42,9 @@ class Game:
     def make_statusview(self):
         self.statusview = player.StatusView(self.player, 10, 10)
 
-    def make_reborn(self):
+    def make_reborn(self, name: str, x: int, y: int):
         self.is_dead = False
-        self.reborn = reborn.Reborn()
+        self.reborn = reborn.Reborn(name, x, y)
 
     def next(self):
         x = self.roulette.run()
@@ -71,6 +71,8 @@ class Game:
             self.tiles.draw(self.screen)
             self.player.draw(self.screen)
             self.enemies.draw(self.screen)
+        elif self.is_dead:
+            self.reborn.draw(self.screen)
         self.statusview.draw(self.screen)
 
         pygame.display.update()  # 画面を更新
@@ -81,9 +83,17 @@ class Game:
             if event.type == QUIT:  # 閉じるボタンが押されたら終了
                 pygame.quit()  # Pygameの終了(画面閉じられる)
                 sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_SPACE:
-                    self.next()
+            if not self.is_dead:
+                if event.type == KEYDOWN:
+                    if event.key == K_SPACE:
+                        self.next()
+            elif self.is_dead:
+                if event.type == KEYDOWN:
+                    if event.key == K_r:
+                        # 転生処理 関数化予定
+                        self.is_dead = False
+                        self.player.reborn += 1
+                        self.player.nowtile = 0
 
 
 def main():
@@ -101,7 +111,7 @@ def main():
     game.make_battle("./asset/battle.png")
     game.make_enemy()
     game.make_statusview()
-    game.make_reborn()
+    game.make_reborn("./asset/reborn.png", 0, 100)
 
     while 1:
         game.draw()
