@@ -10,17 +10,13 @@ import reborn
 import roulette
 import tile
 
-SCR_RECT = Rect(0, 0, 640, 480)
-SCREEN_SIZE = (400, 300)
+SCR_RECT = Rect(0, 0, 800, 600)
 CAPTION = "test"
 
 
 class Game:
     def __init__(self) -> None:
         pygame.init()
-        self.screen = pygame.display.set_mode(
-            SCREEN_SIZE
-        )  # 400 x 300の大きさの画面を作る
         pygame.display.set_caption(CAPTION)  # 画面上部に表示するタイトルを設定
         self.screen = pygame.display.set_mode(SCR_RECT.size)
 
