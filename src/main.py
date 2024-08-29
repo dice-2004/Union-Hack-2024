@@ -22,7 +22,7 @@ class Game:
 
     def make_tiles(self, name, x: int, y: int, procs: str, pe1: float, name1: str):
         self.tile_effect = []
-        self.tiles = tile.Tiles(name, 32, x, y, procs, self.tile_effect, pe1, name1)
+        self.tiles = tile.Tiles(name, 48, x, y, procs, self.tile_effect, pe1, name1)
 
         # for debug
         print(self.tile_effect)
@@ -30,8 +30,8 @@ class Game:
     def make_roulette(self):
         self.roulette = roulette.Roulette()
 
-    def make_player(self, name):
-        self.player = player.Player(name, 0, 0)
+    def make_player(self, name, x, y):
+        self.player = player.Player(name, x, y)
 
     def make_battle(self, name):
         self.battle = battle.Battle(name, 200, 200)
@@ -89,13 +89,19 @@ class Game:
 def main():
     game = Game()
     game.make_tiles(
-        "./asset/tile_basic.png", 0, 0, tile.test_proc, 0.5, "./asset/tile_battle.png"
+        "./asset/tile_basic.png",
+        0,
+        100,
+        tile.test_proc,
+        0.5,
+        "./asset/tile_battle.png",
     )
     game.make_roulette()
-    game.make_player("./asset/pl.png")
+    game.make_player("./asset/pl.png", 0, 100)
     game.make_battle("./asset/battle.png")
     game.make_enemy()
     game.make_statusview()
+    game.make_reborn()
 
     while 1:
         game.draw()
