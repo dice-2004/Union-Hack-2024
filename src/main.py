@@ -120,6 +120,7 @@ class Game:
             "./asset/tile_battle.png",
             0,
             0,
+            0,
         )
 
     def draw(self):
