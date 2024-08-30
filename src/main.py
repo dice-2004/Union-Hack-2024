@@ -37,7 +37,9 @@ class Game:
         print(self.tile_effect)
 
     def make_roulette(self):
-        self.roulette = roulette.Roulette()
+        self.roulette = roulette.Roulette(
+            "./asset/roulette_000.png", 550, 5, "./asset/roulette_001.png", 550, 0
+        )
 
     def make_player(self, name, x, y):
         self.player = player.Player(name, x, y)
@@ -56,7 +58,7 @@ class Game:
         self.reborn = reborn.Reborn(name, x, y)
 
     def next(self):
-        x = self.roulette.run()
+        x = self.roulette.run(self.screen)
 
         # for debug
         print(x)
@@ -95,6 +97,7 @@ class Game:
         elif self.is_dead:
             self.reborn.draw(self.screen)
         self.statusview.draw(self.screen)
+        self.roulette.draw(self.screen)
 
         pygame.display.update()  # 画面を更新
 

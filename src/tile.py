@@ -112,13 +112,13 @@ class Tiles:
 
         while posx + 2 < x // tilesize and posy + 2 < y // tilesize:
             if prev == "d":
-                n = max((random.randint(1, (x // tilesize - posx) // 1.5), 2))
+                n = max((random.randint(1, (x // tilesize - posx) // 2), 2))
                 posx += n
                 prev = "r"
                 res += f"r{n}"
                 res_rev = f"l{n}" + res_rev
             else:
-                n = max((random.randint(1, (y // tilesize - posy) // 1.5), 2))
+                n = max((random.randint(1, (y // tilesize - posy) // 2), 2))
                 posy += n
                 prev = "d"
                 res += f"d{n}"
