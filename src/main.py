@@ -46,9 +46,12 @@ class Game:
         self.select = 0
 
 
-    def make_tiles(self, name, x: int, y: int, pe1: float, name1: str):
+    def make_tiles(self, name, x: int, y: int, pe1: float, name1: str,seed: str,is_load:int):
         self.tile_effect = []
-        self.tileseed = tile.Tiles.genseed(48, (550, 500))
+        if is_load == 1:
+            self.tileseed = seed
+        else:
+            self.tileseed = tile.Tiles.genseed(48, (550, 500))
         self.tiles = tile.Tiles(
             name, 48, x, y, self.tileseed, self.tile_effect, pe1, name1
         )
@@ -106,6 +109,8 @@ class Game:
             100,
             0.5,
             "./asset/tile_battle.png",
+            0,
+            0,
         )
 
     def draw(self):
@@ -169,7 +174,7 @@ class Game:
 
 
         #プレイヤーレベル・周回回数・転生回数・シード値
-        data={"Player":{"level":self.player.lv,"reincarnation":self.player.rebornnum,"seed":0},"Enemy":{}}
+        data={"Player":{"level":self.player.lv,"reincarnation":self.player.rebornnum,"seed":self.tileseed},"Enemy":{}}
         print(data)
         with open(SAVEFILE,"w",encoding="UTF-8") as f:
             print("save")
@@ -183,7 +188,7 @@ class Game:
         with open(SAVEFILE,"r",encoding="UTF-8") as f:
             data=json.loads(f.read())
 
-            print(data)
+            print(type(data["Player"]["seed"]))
             return data["Player"]["level"],data["Player"]["reincarnation"],data["Player"]["seed"]
 
 
@@ -262,19 +267,9 @@ def main():
     simple = 0
     title = Title()
     game = Game()
-    game.make_tiles(
-        "./asset/tile_basic.png",
-        0,
-        100,
-        0.5,
-        "./asset/tile_battle.png",
-    )
     game.make_roulette()
     game.make_battle("./asset/battle.png")
-    game.make_enemy()
     game.make_reborn("./asset/reborn.png", 0, 100)
-
-    title = Title()
     while 1:
         if title.pushed_enter == 0:
             title.draw()
@@ -283,6 +278,16 @@ def main():
         if title.pushed_enter == 1:
             if title.select==0:
                 if simple ==0:
+                    game.make_tiles(
+                        "./asset/tile_basic.png",
+                        0,
+                        100,
+                        0.5,
+                        "./asset/tile_battle.png",
+                        0,
+                        0,
+                    )
+                    game.make_enemy()
                     game.make_player("./asset/pl.png", 0, 100,0,0,0)
                     game.make_statusview()
                     simple =1
@@ -291,6 +296,17 @@ def main():
             elif title.select==1:
                 if simple==0:
                     level,reburn,seed=game.load()
+                    print(type(seed))
+                    game.make_tiles(
+                        "./asset/tile_basic.png",
+                        0,
+                        100,
+                        0.5,
+                        "./asset/tile_battle.png",
+                        seed,
+                        1,
+                    )
+                    game.make_enemy()
                     game.make_player("./asset/pl.png", 0, 100,level,reburn,1)
                     game.make_statusview()
                     simple=1
