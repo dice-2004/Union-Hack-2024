@@ -129,8 +129,8 @@ class Tiles:
         #     res += f"r{}"
 
         if prev == "r":
-            res_rev = res_rev[2 : len(res_rev) - 2] + res_rev[0:2]
-        res += "r2u2" + res_rev
+            res_rev = res_rev[2:] + res_rev[0:2]
+        res += "r2u2" + res_rev + "l1"
 
         print(f"{res=}")
         return res
