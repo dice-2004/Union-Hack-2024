@@ -82,8 +82,24 @@ class Enemies:
         for key in self.enemies.keys():
             self.enemies[key].draw(screen)
 
+    def savefmt(self):
+        res = {}
+        for key in self.enemies.keys():
+            res[f"{key}"] = [self.enemies[key].lv, self.enemies[key].cfg.tag.value]
+        return res
 
-default_enemycfgs = [
+    def loadfmt(self, load, tiles: tile.Tiles):
+        self.enemies = {}
+        for key in load.keys():
+            match load[key][1]:
+                case 1:
+                    cfg = ENEMY_CFGS[1]
+                case 2:
+                    cfg = ENEMY_CFGS[2]
+            self.enemies[int(key)] = Enemy(cfg, *tiles.convert_pos(key))
+
+
+ENEMY_CFGS = [
     EnemyConfitg(EnemyTag.E1, "./asset/e1.png", 0.1, 20, 25, 5),
     # EnemyConfitg(EnemyTag.E2, "./asset/e2.png", 0.1, 20, 10, 20),
 ]
