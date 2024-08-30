@@ -16,9 +16,8 @@ from game_title import Title
 SCR_RECT = Rect(0, 0, 800, 600)
 
 CAPTION = "test"
-SAVEFILE="files/savedata.json"
-ERRORLOG="files/error.log"
-
+SAVEFILE = "files/savedata.json"
+ERRORLOG = "files/error.log"
 
 
 class Game:
@@ -27,10 +26,12 @@ class Game:
         pygame.display.set_caption(CAPTION)  # 画面上部に表示するタイトルを設定
         self.screen = pygame.display.set_mode(SCR_RECT.size)
 
-
-    def make_tiles(self, name, x: int, y: int, procs: str, pe1: float, name1: str):
+    def make_tiles(self, name, x: int, y: int, pe1: float, name1: str):
         self.tile_effect = []
-        self.tiles = tile.Tiles(name, 48, x, y, procs, self.tile_effect, pe1, name1)
+        self.tileseed = tile.Tiles.genseed(48, (550, 500))
+        self.tiles = tile.Tiles(
+            name, 48, x, y, self.tileseed, self.tile_effect, pe1, name1
+        )
 
         # for debug
         print(self.tile_effect)
@@ -77,6 +78,13 @@ class Game:
         self.is_dead = False
         self.player.reborn()
         self.make_enemy()
+        self.make_tiles(
+            "./asset/tile_basic.png",
+            0,
+            100,
+            0.5,
+            "./asset/tile_battle.png",
+        )
 
     def draw(self):
         self.screen.fill((0, 0, 0))
@@ -111,50 +119,48 @@ class Game:
             try:
                 func(*args, **kwargs)
             except IOError as e:
-                with open(ERRORLOG,"a",encoding="UTF-8") as f:
+                with open(ERRORLOG, "a", encoding="UTF-8") as f:
                     f.write(e)
                 return 1
 
             except json.JSONDecodeError as e:
-                with open(ERRORLOG,"a",encoding="UTF-8") as f:
+                with open(ERRORLOG, "a", encoding="UTF-8") as f:
                     f.write(e)
                 return 1
 
             except Exception as e:
-                with open(ERRORLOG,"a",encoding="UTF-8") as f:
+                with open(ERRORLOG, "a", encoding="UTF-8") as f:
                     f.write(e)
                 return 1
+
         return wapper
 
-    #正常終了 -> 0 異常終了 -> 1
+    # 正常終了 -> 0 異常終了 -> 1
     @FILE_OPE
     def save(self):
-        XXX=000
-        #プレイヤーレベル・周回回数・転生回数・シード値
-        data={"level":XXX,"lap":XXX,"reincarnation":XXX,"seed":XXX}
-        with open(SAVEFILE,"w",encoding="UTF-8") as f:
-            json.dump(data,f,indent=4)
+        XXX = 000
+        # プレイヤーレベル・周回回数・転生回数・シード値
+        data = {"level": XXX, "lap": XXX, "reincarnation": XXX, "seed": XXX}
+        with open(SAVEFILE, "w", encoding="UTF-8") as f:
+            json.dump(data, f, indent=4)
         return 0
 
     @FILE_OPE
     def load(self):
-        with open(SAVEFILE,"r",encoding="UTF-8") as f:
-            data=json.loads(f.read())
+        with open(SAVEFILE, "r", encoding="UTF-8") as f:
+            data = json.loads(f.read())
             print(data)
         return 0
 
 
-
-
 def main():
-    simple=0
-    title=Title()
+    simple = 0
+    title = Title()
     game = Game()
     game.make_tiles(
         "./asset/tile_basic.png",
         0,
         100,
-        tile.test_proc,
         0.5,
         "./asset/tile_battle.png",
     )
@@ -165,30 +171,27 @@ def main():
     game.make_statusview()
     game.make_reborn("./asset/reborn.png", 0, 100)
 
-    title=Title()
+    title = Title()
     while 1:
         if title.pushed_enter == 1:
             title.draw()
             title.update()
 
         if title.pushed_enter == 0:
-            if title.select==0:
+            if title.select == 0:
                 game.draw()
                 game.update()
-            elif title.select==1:
-                if simple==0:
+            elif title.select == 1:
+                if simple == 0:
                     game.load()
-                    simple=1
+                    simple = 1
 
                 game.draw()
                 game.update()
-            else :
-                #終わる
+            else:
+                # 終わる
                 pygame.quit()
                 sys.exit()
-
-
-
 
 
 if __name__ == "__main__":

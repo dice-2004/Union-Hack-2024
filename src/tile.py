@@ -100,3 +100,37 @@ class Tiles:
 
     def convert_pos(self, n: int) -> tuple[int, int]:
         return (self.xs[n], self.ys[n])
+
+    def genseed(tilesize: int, area: tuple[int, int]) -> str:
+        x, y = area
+
+        res = "d2"
+        res_rev = ""
+        posx = 2
+        posy = 2
+        prev = "d"
+
+        while posx + 2 < x // tilesize and posy + 2 < y // tilesize:
+            if prev == "d":
+                n = max((random.randint(1, (x // tilesize - posx) // 1.5), 2))
+                posx += n
+                prev = "r"
+                res += f"r{n}"
+                res_rev = f"l{n}" + res_rev
+            else:
+                n = max((random.randint(1, (y // tilesize - posy) // 1.5), 2))
+                posy += n
+                prev = "d"
+                res += f"d{n}"
+                res_rev = f"u{n}" + res_rev
+            print(f"{posx=}{posy=}")
+
+        # if posx + 1 < x // tilesize:
+        #     res += f"r{}"
+
+        if prev == "r":
+            res_rev = res_rev[2 : len(res_rev) - 2] + res_rev[0:2]
+        res += "r2u2" + res_rev
+
+        print(f"{res=}")
+        return res
