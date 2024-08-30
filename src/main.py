@@ -30,9 +30,11 @@ COL=[0,0,0]
 SCR_RECT = Rect(0, 0, 800, 600)
 
 CAPTION = "test"
+
 SAVEFILE="files/savedata.json"
 ERRORLOG="files/error.log"
 FONT="font/x12y16pxMaruMonica.ttf"
+
 
 
 class Game:
@@ -44,16 +46,20 @@ class Game:
         self.select = 0
 
 
-
-    def make_tiles(self, name, x: int, y: int, procs: str, pe1: float, name1: str):
+    def make_tiles(self, name, x: int, y: int, pe1: float, name1: str):
         self.tile_effect = []
-        self.tiles = tile.Tiles(name, 48, x, y, procs, self.tile_effect, pe1, name1)
+        self.tileseed = tile.Tiles.genseed(48, (550, 500))
+        self.tiles = tile.Tiles(
+            name, 48, x, y, self.tileseed, self.tile_effect, pe1, name1
+        )
 
         # for debug
         print(self.tile_effect)
 
     def make_roulette(self):
-        self.roulette = roulette.Roulette()
+        self.roulette = roulette.Roulette(
+            "./asset/roulette_000.png", 550, 5, "./asset/roulette_001.png", 550, 0
+        )
 
     def make_player(self, name, x, y,level,rebornnum,is_load):
         self.player = player.Player(name, x, y,level,rebornnum,is_load)
@@ -72,7 +78,7 @@ class Game:
         self.reborn = reborn.Reborn(name, x, y)
 
     def next(self):
-        x = self.roulette.run()
+        x = self.roulette.run(self.screen)
 
         # for debug
         print(x)
@@ -94,6 +100,13 @@ class Game:
         self.is_dead = False
         self.player.reborn()
         self.make_enemy()
+        self.make_tiles(
+            "./asset/tile_basic.png",
+            0,
+            100,
+            0.5,
+            "./asset/tile_battle.png",
+        )
 
     def draw(self):
         self.screen.fill((0, 0, 0))
@@ -104,6 +117,7 @@ class Game:
         elif self.is_dead:
             self.reborn.draw(self.screen)
         self.statusview.draw(self.screen)
+        self.roulette.draw(self.screen)
 
         pygame.display.update()  # 画面を更新
 
@@ -149,9 +163,10 @@ class Game:
                 return 1,0,0
         return wapper
 
-    #正常終了 -> 0 異常終了 -> 1
+    # 正常終了 -> 0 異常終了 -> 1
     @FILE_OPE
     def save(self):
+
 
         #プレイヤーレベル・周回回数・転生回数・シード値
         data={"Player":{"level":self.player.lv,"reincarnation":self.player.rebornnum,"seed":0},"Enemy":{}}
@@ -159,6 +174,7 @@ class Game:
         with open(SAVEFILE,"w",encoding="UTF-8") as f:
             print("save")
             json.dump(data,f,indent=4)
+
         return 0
 
     @FILE_OPE
@@ -166,6 +182,7 @@ class Game:
 
         with open(SAVEFILE,"r",encoding="UTF-8") as f:
             data=json.loads(f.read())
+
             print(data)
             return data["Player"]["level"],data["Player"]["reincarnation"],data["Player"]["seed"]
 
@@ -241,17 +258,14 @@ class Game:
 
 
 
-
-
 def main():
-    simple=0
-    title=Title()
+    simple = 0
+    title = Title()
     game = Game()
     game.make_tiles(
         "./asset/tile_basic.png",
         0,
         100,
-        tile.test_proc,
         0.5,
         "./asset/tile_battle.png",
     )
@@ -260,7 +274,7 @@ def main():
     game.make_enemy()
     game.make_reborn("./asset/reborn.png", 0, 100)
 
-    title=Title()
+    title = Title()
     while 1:
         if title.pushed_enter == 0:
             title.draw()
@@ -281,15 +295,13 @@ def main():
                     game.make_statusview()
                     simple=1
 
+
                 game.draw()
                 game.update()
-            else :
-                #終わる
+            else:
+                # 終わる
                 pygame.quit()
                 sys.exit()
-
-
-
 
 
 if __name__ == "__main__":
