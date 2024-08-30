@@ -8,4 +8,5 @@ venv/
 /src/files/savedata.json
 /src/files/error.log
 /src/test.py
+/files
 *.db
