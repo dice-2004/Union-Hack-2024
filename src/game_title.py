@@ -25,11 +25,9 @@ COL=[255,255,255]
 
 class Title:
     def __init__(self):
-        ### 後で削除        # Gameで設定済み
         pygame.init()# 400 x 300の大きさの画面を作る
         pygame.display.set_caption(CAPTION)  # 画面上部に表示するタイトルを設定
         Title.screen = pygame.display.set_mode(SCR_RECT.size)
-        ###
 
         self.select = 0
         self.pushed_enter = 1
