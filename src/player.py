@@ -1,5 +1,7 @@
 import pygame
 
+FONT = "font/x12y16pxMaruMonica.ttf"
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, name, x, y,level,rebornnum,is_load):
@@ -47,12 +49,12 @@ class Player(pygame.sprite.Sprite):
 class StatusView(pygame.sprite.Sprite):
     def __init__(self, pl: Player, x: int, y: int):
         self.pos = (x, y)
-        self.font = pygame.font.SysFont("arial", 16)
+        self.font = pygame.font.Font(FONT, 32)
         self.update(pl)
 
     def update(self, pl: Player):
         self.text = self.font.render(
-            f"level: {pl.lv}\nexp: {pl.exp}\nhp: {pl.hp}\nreborn: {pl.rebornnum}",
+            f"level: {pl.lv} exp: {pl.exp} hp: {pl.hp} reborn: {pl.rebornnum}",
             True,
             (255, 255, 255),
         )
