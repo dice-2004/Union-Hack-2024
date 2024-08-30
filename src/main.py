@@ -15,7 +15,6 @@ import reborn
 import roulette
 import tile
 from game_title import Title
-from game_menu import Menu
 
 width=250
 height=50
@@ -41,7 +40,7 @@ class Game:
         pygame.init()
         pygame.display.set_caption(CAPTION)  # 画面上部に表示するタイトルを設定
         self.screen = pygame.display.set_mode(SCR_RECT.size)
-        self.pushed_enter = 1
+        self.pushed_enter = 0
         self.select = 0
 
 
@@ -56,8 +55,8 @@ class Game:
     def make_roulette(self):
         self.roulette = roulette.Roulette()
 
-    def make_player(self, name, x, y):
-        self.player = player.Player(name, x, y)
+    def make_player(self, name, x, y,level,rebornnum,is_load):
+        self.player = player.Player(name, x, y,level,rebornnum,is_load)
 
     def make_battle(self, name):
         self.battle = battle.Battle(name, 200, 200)
@@ -132,39 +131,44 @@ class Game:
     def FILE_OPE(func):
         def wapper(*args, **kwargs):
             try:
-                func(*args, **kwargs)
+                data=func(*args, **kwargs)
+                return data
             except IOError as e:
                 with open(ERRORLOG,"a",encoding="UTF-8") as f:
-                    f.write(str(e))
-                return 1
+                    f.write(f"{str(e)}\n")
+                return 1,0,0
 
             except json.JSONDecodeError as e:
                 with open(ERRORLOG,"a",encoding="UTF-8") as f:
-                    f.write(str(e))
-                return 1
+                    f.write(f"{str(e)}\n")
+                return 1,0,0
 
             except Exception as e:
                 with open(ERRORLOG,"a",encoding="UTF-8") as f:
-                    f.write(str(e))
-                return 1
+                    f.write(f"{str(e)}\n")
+                return 1,0,0
         return wapper
 
     #正常終了 -> 0 異常終了 -> 1
     @FILE_OPE
     def save(self):
-        XXX=000
+
         #プレイヤーレベル・周回回数・転生回数・シード値
-        data={"level":XXX,"lap":XXX,"reincarnation":XXX,"seed":XXX}
+        data={"Player":{"level":self.player.lv,"reincarnation":self.player.rebornnum,"seed":0},"Enemy":{}}
+        print(data)
         with open(SAVEFILE,"w",encoding="UTF-8") as f:
+            print("save")
             json.dump(data,f,indent=4)
         return 0
 
     @FILE_OPE
     def load(self):
+
         with open(SAVEFILE,"r",encoding="UTF-8") as f:
             data=json.loads(f.read())
             print(data)
-        return 0
+            return data["Player"]["level"],data["Player"]["reincarnation"],data["Player"]["seed"]
+
 
     def menu_select(self):
         rects = [CON,SAVE,N_SAVE]
@@ -204,7 +208,7 @@ class Game:
                         self.select+=1
                 elif event.key == K_KP_ENTER or event.key == K_RETURN:
                     print("ent_M")
-                    self.pushed_enter=0
+                    self.pushed_enter=1
 
     def draw_text(self,siz,txt,col,sc,x,y):
         fnt=pygame.font.Font(FONT,siz)
@@ -213,13 +217,13 @@ class Game:
 
     def menu(self):
         while 1:
-            if self.pushed_enter == 1:
+            if self.pushed_enter == 0:
                 self.menu_select()
                 self.menu_update()
 
-            if self.pushed_enter == 0:
+            if self.pushed_enter == 1:
                 if self.select==0:
-                    self.pushed_enter = 1
+                    self.pushed_enter = 0
                     break
                     pass
                 elif self.select==1:
@@ -242,7 +246,6 @@ class Game:
 def main():
     simple=0
     title=Title()
-    menu= Menu()
     game = Game()
     game.make_tiles(
         "./asset/tile_basic.png",
@@ -253,25 +256,29 @@ def main():
         "./asset/tile_battle.png",
     )
     game.make_roulette()
-    game.make_player("./asset/pl.png", 0, 100)
     game.make_battle("./asset/battle.png")
     game.make_enemy()
-    game.make_statusview()
     game.make_reborn("./asset/reborn.png", 0, 100)
 
     title=Title()
     while 1:
-        if title.pushed_enter == 1:
+        if title.pushed_enter == 0:
             title.draw()
             title.update()
 
-        if title.pushed_enter == 0:
+        if title.pushed_enter == 1:
             if title.select==0:
+                if simple ==0:
+                    game.make_player("./asset/pl.png", 0, 100,0,0,0)
+                    game.make_statusview()
+                    simple =1
                 game.draw()
                 game.update()
             elif title.select==1:
                 if simple==0:
-                    game.load()
+                    level,reburn,seed=game.load()
+                    game.make_player("./asset/pl.png", 0, 100,level,reburn,1)
+                    game.make_statusview()
                     simple=1
 
                 game.draw()

@@ -30,12 +30,12 @@ class Title:
         Title.screen = pygame.display.set_mode(SCR_RECT.size)
 
         self.select = 0
-        self.pushed_enter = 1
+        self.pushed_enter = 0
         self.character=pygame.image.load("./asset/pl.png")
         pygame.font.init()
 
     def draw(self):
-        self.pushed_enter=1
+        self.pushed_enter=0
         rects = [STA, CON, END]
         colors = [N_SELECT, N_SELECT, N_SELECT]
         txts=["はじめる","続きから","おわる"]
@@ -73,7 +73,7 @@ class Title:
                         self.select+=1
                 elif event.key == K_KP_ENTER or event.key == K_RETURN:
                     print("ent")
-                    self.pushed_enter=0
+                    self.pushed_enter=1
 
     def draw_text(self,siz,txt,col,sc,x,y):
         fnt=pygame.font.Font(FONT,siz)
