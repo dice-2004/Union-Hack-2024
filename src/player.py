@@ -2,18 +2,24 @@ import pygame
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, name, x, y):
+    def __init__(self, name, x, y,level,rebornnum,is_load):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(name).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
         self.direction = 0
         self.nowtile = 0
-        self.rebornnum = 0
-        self.lv = 1
         self.exp = 0
-        self.hp = 10
-        self.atk = 3
+        if is_load==1:
+            self.rebornnum = rebornnum #ここ
+            self.lv = level #ここ
+            self.atk = self.lv * 2 + 1
+            self.hp = self.lv * 4 + 6
+        else:
+            self.rebornnum = 0 #ここ
+            self.lv = 1 #ここ
+            self.hp = 10
+            self.atk = 3
 
     def lvup_check(self):
         if self.lv * self.lv * 3 < self.exp:
