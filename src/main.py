@@ -146,6 +146,7 @@ class Game:
             0,
         )
         self.make_enemy()
+        self.player.move(*self.tiles.convert_pos(self.player.nowtile))
 
     def draw(self):
         self.screen.fill((0, 0, 0))
