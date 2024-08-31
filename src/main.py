@@ -13,6 +13,7 @@ import enemy
 import player
 import reborn
 import roulette
+import sound
 import tile
 from game_title import Title
 
@@ -89,8 +90,15 @@ class Game:
         self.is_dead = False
         self.reborn = reborn.Reborn(name, x, y)
 
+    def make_sound(self):
+        self.sounds = sound.Sounds()
+        self.sounds.mainbgm()
+
+    def make_backscreen(self):
+        self.backscreen = tile.BackScreen("./asset/backscreen.png", 0, 100)
+
     def next(self):
-        x = self.roulette.run(self.screen)
+        x = self.roulette.run(self.screen, self.sounds)
 
         # for debug
         print(x)
@@ -98,12 +106,14 @@ class Game:
         next_tile = (self.player.nowtile + x) % self.tiles.num
         self.player.move(*self.tiles.convert_pos(next_tile))
         self.player.nowtile = next_tile
-
+        self.draw()
         match self.tile_effect[self.player.nowtile]:
             case tile.TileEffect.Basic:
                 pass
             case tile.TileEffect.Battle:
                 print("battle")
+                self.sounds.play_se_btl()
+                self.sounds.play_se_btl()
                 self.is_dead = not self.battle.jamp(
                     self.screen, self.player, self.enemies.enemies[self.player.nowtile]
                 )
@@ -125,10 +135,11 @@ class Game:
 
     def draw(self):
         self.screen.fill((0, 0, 0))
+        self.backscreen.draw(self.screen)
         if not self.is_dead:
             self.tiles.draw(self.screen)
-            self.player.draw(self.screen)
             self.enemies.draw(self.screen)
+            self.player.draw(self.screen)
         elif self.is_dead:
             self.reborn.draw(self.screen)
         self.statusview.draw(self.screen)
@@ -150,10 +161,12 @@ class Game:
                         self.next()
                     elif event.key == K_ESCAPE:
                         print("Esc")
+                        self.sounds.se_sel()
                         self.menu()
             elif self.is_dead:
                 if event.type == KEYDOWN:
                     if event.key == K_r:
+                        self.sounds.se_sel()
                         self.reborngame()
 
     @staticmethod
@@ -243,13 +256,16 @@ class Game:
                     print("up_M")
                     if self.select != 0:
                         self.select -= 1
+                        self.sounds.play_se_cur()
                 elif event.key == K_DOWN or event.key == K_KP2:
                     print("dwn_M")
                     if self.select != 2:
                         self.select += 1
+                        self.sounds.play_se_cur()
                 elif event.key == K_KP_ENTER or event.key == K_RETURN:
                     print("ent_M")
                     self.pushed_enter = 1
+                    self.sounds.play_se_sel()
 
     def draw_text(self, siz, txt, col, sc, x, y):
         fnt = pygame.font.Font(FONT, siz)
@@ -285,6 +301,8 @@ def main():
     game.make_roulette()
     game.make_battle("./asset/battle.png")
     game.make_reborn("./asset/reborn.png", 0, 100)
+    game.make_sound()
+    game.make_backscreen()
     while 1:
         if title.pushed_enter == 0:
             title.draw()

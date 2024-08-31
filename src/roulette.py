@@ -23,15 +23,16 @@ class Roulette(pygame.sprite.Sprite):
         screen.blit(self.imagerlt, self.rectrlt)
         pygame.display.update()  # 画面を更新
 
-    def run(self, screen) -> int:
+    def run(self, screen, sounds) -> int:
         r = random.randrange(1, 5)
         now = self.ang // 45 + 1
         times = r - now + 8
         for _ in range(times):
-            time.sleep(0.3)
+            time.sleep(0.15)
             self.ang = (45 + self.ang) % 180
             self.rotate(self.ang)
             self.draw(screen)
+            sounds.play_se_rlt()
 
         return r
 

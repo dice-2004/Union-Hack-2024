@@ -26,7 +26,7 @@ class Battle(pygame.sprite.Sprite):
         # エンカウント
         basetime = time.time()
         is_timeout = True
-        while basetime + 10 > time.time():
+        while basetime + 2 > time.time():
             self.draw(screen)
             pygame.display.update()  # 画面を更新
             for event in pygame.event.get():

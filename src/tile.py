@@ -144,7 +144,7 @@ class Tiles:
 
         print(f"{res=}")
         return res
-
+     
     def loadfmt(load: dict) -> list:
         elist = []
         for i in range(50):
@@ -153,3 +153,18 @@ class Tiles:
             else:
                 elist.append(TileEffect.Battle)
         return elist
+
+class BackScreen(pygame.sprite.Sprite):
+    def __init__(self, name, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(name).convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+        self.direction = 0
+
+    def update(self):
+        pass
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+

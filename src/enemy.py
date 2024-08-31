@@ -102,6 +102,6 @@ class Enemies:
 
 
 ENEMY_CFGS = [
-    EnemyConfitg(EnemyTag.E1, "./asset/e1.png", 0.1, 20, 25, 5),
+    EnemyConfitg(EnemyTag.E1, "./asset/enemy.png", 0.1, 20, 25, 5),
     # EnemyConfitg(EnemyTag.E2, "./asset/e2.png", 0.1, 20, 10, 20),
 ]
