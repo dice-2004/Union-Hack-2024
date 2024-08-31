@@ -34,7 +34,7 @@ class EnemyConfitg:
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, cfg: EnemyConfitg, x: int, y: int):
+    def __init__(self, cfg: EnemyConfitg, x: int, y: int, lv: int = 1):
         pygame.sprite.Sprite.__init__(self)
         print(cfg.path)
         self.image = pygame.image.load(cfg.path).convert_alpha()
@@ -42,7 +42,7 @@ class Enemy(pygame.sprite.Sprite):
         print((x, y))
         self.rect.topleft = (x, y)
         self.direction = 0
-        self.lv = 1
+        self.lv = lv
         self.cfg = cfg
         self.update()
 
@@ -93,10 +93,12 @@ class Enemies:
         for key in load.keys():
             match load[key][1]:
                 case 1:
-                    cfg = ENEMY_CFGS[1]
+                    cfg = ENEMY_CFGS[0]
                 case 2:
-                    cfg = ENEMY_CFGS[2]
-            self.enemies[int(key)] = Enemy(cfg, *tiles.convert_pos(key))
+                    cfg = ENEMY_CFGS[1]
+            x, y = tiles.convert_pos(int(key))
+            print(load[key][0])
+            self.enemies[int(key)] = Enemy(cfg, x, y, load[key][0])
 
 
 ENEMY_CFGS = [
