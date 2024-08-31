@@ -127,8 +127,8 @@ class Game:
         self.screen.fill((0, 0, 0))
         if not self.is_dead:
             self.tiles.draw(self.screen)
-            self.player.draw(self.screen)
             self.enemies.draw(self.screen)
+            self.player.draw(self.screen)
         elif self.is_dead:
             self.reborn.draw(self.screen)
         self.statusview.draw(self.screen)
