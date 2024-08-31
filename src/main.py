@@ -95,7 +95,7 @@ class Game:
         self.sounds.mainbgm()
 
     def next(self):
-        x = self.roulette.run(self.screen)
+        x = self.roulette.run(self.screen, self.sounds)
 
         # for debug
         print(x)
@@ -109,6 +109,8 @@ class Game:
                 pass
             case tile.TileEffect.Battle:
                 print("battle")
+                self.sounds.play_se_btl()
+                self.sounds.play_se_btl()
                 self.is_dead = not self.battle.jamp(
                     self.screen, self.player, self.enemies.enemies[self.player.nowtile]
                 )
@@ -155,10 +157,12 @@ class Game:
                         self.next()
                     elif event.key == K_ESCAPE:
                         print("Esc")
+                        self.sounds.se_sel()
                         self.menu()
             elif self.is_dead:
                 if event.type == KEYDOWN:
                     if event.key == K_r:
+                        self.sounds.se_sel()
                         self.reborngame()
 
     @staticmethod
