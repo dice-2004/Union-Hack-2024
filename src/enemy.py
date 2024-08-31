@@ -56,11 +56,10 @@ class Enemy(pygame.sprite.Sprite):
 
 
 class Enemies:
-    def __init__(self, tiles: tile.Tiles, elist: tile.Tile, cfgs: List[EnemyConfitg]):
-        print("\n\ninit\n")
+    def __init__(self, tiles: tile.Tiles, cfgs: List[EnemyConfitg]):
         self.enemies: dict[int:Enemy] = {}
         probs = []
-        print("in enemiw", tiles.effects)
+
         for i in range(len(cfgs)):
             prob = 0
             for cfg in cfgs[0 : i + 1]:
@@ -68,7 +67,6 @@ class Enemies:
             probs.append(prob)
 
         # print(probs[len(probs) - 1])
-        print("in enemiw", tiles.effects)
 
         for tile_index in range(tiles.num):
             if tiles.effects[tile_index] == tile.TileEffect.Battle:
@@ -99,11 +97,8 @@ class Enemies:
                 case 2:
                     cfg = ENEMY_CFGS[1]
             x, y = tiles.convert_pos(int(key))
-            print("loadfmt", load[key][0])
+            print(load[key][0])
             self.enemies[int(key)] = Enemy(cfg, x, y, load[key][0])
-
-    def __del__(self):
-        print("del: enemies")
 
 
 ENEMY_CFGS = [
