@@ -115,7 +115,7 @@ class Game:
             case tile.TileEffect.Battle:
                 print("battle")
                 self.sounds.play_se_btl()
-                self.sounds.play_se_btl()
+                self.sounds.se_btl.play()
                 self.is_dead = not self.battle.jamp(
                     self.screen, self.player, self.enemies.enemies[self.player.nowtile]
                 )
