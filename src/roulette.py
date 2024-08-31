@@ -28,7 +28,7 @@ class Roulette(pygame.sprite.Sprite):
         now = self.ang // 45 + 1
         times = r - now + 8
         for _ in range(times):
-            time.sleep(0.3)
+            time.sleep(0.15)
             self.ang = (45 + self.ang) % 180
             self.rotate(self.ang)
             self.draw(screen)
