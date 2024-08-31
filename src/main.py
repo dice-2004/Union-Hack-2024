@@ -94,6 +94,9 @@ class Game:
         self.sounds = sound.Sounds()
         self.sounds.mainbgm()
 
+    def make_backscreen(self):
+        self.backscreen = tile.BackScreen("./asset/backscreen.png", 0, 100)
+
     def next(self):
         x = self.roulette.run(self.screen, self.sounds)
 
@@ -132,6 +135,7 @@ class Game:
 
     def draw(self):
         self.screen.fill((0, 0, 0))
+        self.backscreen.draw(self.screen)
         if not self.is_dead:
             self.tiles.draw(self.screen)
             self.enemies.draw(self.screen)
@@ -298,6 +302,7 @@ def main():
     game.make_battle("./asset/battle.png")
     game.make_reborn("./asset/reborn.png", 0, 100)
     game.make_sound()
+    game.make_backscreen()
     while 1:
         if title.pushed_enter == 0:
             title.draw()
