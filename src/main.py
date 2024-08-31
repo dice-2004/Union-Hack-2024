@@ -103,17 +103,19 @@ class Game:
         # for debug
         print(x)
 
-        next_tile = (self.player.nowtile + x) % self.tiles.num
-        self.player.move(*self.tiles.convert_pos(next_tile))
-        self.player.nowtile = next_tile
-        self.draw()
+        for _ in range(x):
+            next_tile = (self.player.nowtile + 1) % self.tiles.num
+            self.player.move(*self.tiles.convert_pos(next_tile))
+            self.player.nowtile = next_tile
+            self.draw()
+            time.sleep(0.2)
         match self.tile_effect[self.player.nowtile]:
             case tile.TileEffect.Basic:
                 pass
             case tile.TileEffect.Battle:
                 print("battle")
                 self.sounds.play_se_btl()
-                self.sounds.play_se_btl()
+                self.sounds.se_btl.play()
                 self.is_dead = not self.battle.jamp(
                     self.screen, self.player, self.enemies.enemies[self.player.nowtile]
                 )
@@ -161,12 +163,12 @@ class Game:
                         self.next()
                     elif event.key == K_ESCAPE:
                         print("Esc")
-                        self.sounds.se_sel()
+                        self.sounds.se_sel.play()
                         self.menu()
             elif self.is_dead:
                 if event.type == KEYDOWN:
                     if event.key == K_r:
-                        self.sounds.se_sel()
+                        self.sounds.se_sel.play()
                         self.reborngame()
 
     @staticmethod
@@ -201,6 +203,8 @@ class Game:
                 "level": self.player.lv,
                 "reincarnation": self.player.rebornnum,
                 "seed": self.tileseed,
+                "exp": self.player.exp,
+                "plpos": self.player.nowtile,
             },
             "Enemies": self.enemies.savefmt(),
         }
@@ -221,6 +225,8 @@ class Game:
                 data["Player"]["level"],
                 data["Player"]["reincarnation"],
                 data["Player"]["seed"],
+                data["Player"]["exp"],
+                data["Player"]["plpos"],
                 data["Enemies"],
             )
 
@@ -329,7 +335,7 @@ def main():
                 game.update()
             elif title.select == 1:
                 if simple == 0:
-                    level, reburn, seed, tileeff = game.load()
+                    level, reburn, seed, exp, plpos, tileeff = game.load()
                     print(type(seed), tileeff)
                     game.make_tiles(
                         "./asset/tile_basic.png",
@@ -344,6 +350,9 @@ def main():
                     game.make_enemy()
                     game.enemies.loadfmt(tileeff, game.tiles)
                     game.make_player("./asset/pl.png", 0, 100, level, reburn, 1)
+                    game.player.exp = exp
+                    game.player.move(*game.tiles.convert_pos(plpos))
+                    game.player.nowtile = plpos
                     game.make_statusview()
                     simple = 1
 
