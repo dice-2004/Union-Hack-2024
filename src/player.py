@@ -23,11 +23,15 @@ class Player(pygame.sprite.Sprite):
             self.hp = 10
             self.atk = 3
 
-    def lvup_check(self):
+    def lvup_check(self, sounds):
         if self.lv * self.lv * 3 < self.exp:
             self.lv += 1
             self.exp = 0
             self.hp = self.lv * 4 + 6
+            if sounds is False:
+                pass
+            else:
+                sounds.se_lvp.play()
         self.atk = self.lv * 2 + 1
         # TODO level up scene
 
@@ -41,9 +45,10 @@ class Player(pygame.sprite.Sprite):
     def reborn(self):
         self.lv = 1
         self.exp = 0
-        self.lvup_check()
+        self.lvup_check(False)
         self.rebornnum += 1
         self.nowtile = 0
+        self.hp = self.lv * 4 + 6
 
 
 class StatusView(pygame.sprite.Sprite):

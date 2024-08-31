@@ -205,7 +205,7 @@ class Game:
             elif self.is_dead:
                 if event.type == KEYDOWN:
                     if event.key == K_r:
-                        self.sounds.se_sel.play()
+                        self.sounds.se_dth.play()
                         self.reborngame()
 
     @staticmethod

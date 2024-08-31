@@ -159,8 +159,7 @@ class Tiles:
         return elist
 
     def __del__(self):
-        for i in range(self.num):
-            del self.tiles[i]
+        del self.tiles
 
 
 class BackScreen(pygame.sprite.Sprite):

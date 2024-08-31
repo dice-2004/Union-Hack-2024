@@ -75,7 +75,7 @@ class Battle(pygame.sprite.Sprite):
                 pl.exp += int(en.exp * (pl.rebornnum + 1) * (pl.rebornnum + 1) * 0.3)
                 en.lv += 1
                 en.update()
-                pl.lvup_check()
+                pl.lvup_check(sounds)
                 return True
             time.sleep(0.4)
             # 敵の攻撃
