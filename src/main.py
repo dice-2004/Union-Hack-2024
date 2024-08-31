@@ -131,6 +131,8 @@ class Game:
                     self.sounds,
                     self.draw,
                 )
+                time.sleep(0.5)
+                self.eventscene.disable()
 
     def reborngame(self):
         self.is_dead = False
