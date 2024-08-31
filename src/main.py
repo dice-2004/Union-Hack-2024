@@ -38,6 +38,7 @@ ERRORLOG = "files/error.log"
 FONT = "font/x12y16pxMaruMonica.ttf"
 
 
+
 class Game:
     def __init__(self) -> None:
         pygame.init()
@@ -45,6 +46,8 @@ class Game:
         self.screen = pygame.display.set_mode(SCR_RECT.size)
         self.pushed_enter = 0
         self.select = 0
+        self.start=None
+        self.Co=0
 
     def make_tiles(
         self,
@@ -153,7 +156,30 @@ class Game:
             self.enemies.draw(self.screen)
             self.player.draw(self.screen)
         elif self.is_dead:
+            enemy_img = pygame.transform.scale(pygame.image.load("./asset/enemy.png"),(130,130))
+            cha=self.character = pygame.transform.scale(pygame.image.load("./asset/plb.png"),(150,150))
+
+            if self.start==None:
+                print("www")
+                self.start = time.time()
+
             self.reborn.draw(self.screen)
+            pygame.draw.rect(self.screen,(255,255,255),(130,250,100,100))
+            if (time.time()-self.start)<1.2:
+                print(self.start)
+                self.screen.blit(cha,(200,200))
+                if self.Co==0:
+
+                    self.screen.blit(enemy_img,(215,200))
+            else:
+                self.start=time.time()
+                if self.Co == 0:
+                    self.Co=1
+                else:
+                    self.Co=0
+
+
+
         self.statusview.draw(self.screen)
         self.eventscene.draw(self.screen)
         self.roulette.draw(self.screen)
