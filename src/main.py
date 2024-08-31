@@ -127,6 +127,7 @@ class Game:
                     self.eventscene,
                     self.statusview,
                     self.sounds,
+                    self.draw,
                 )
 
     def reborngame(self):
@@ -154,6 +155,7 @@ class Game:
         elif self.is_dead:
             self.reborn.draw(self.screen)
         self.statusview.draw(self.screen)
+        self.eventscene.draw(self.screen)
         self.roulette.draw(self.screen)
 
         pygame.display.update()  # 画面を更新

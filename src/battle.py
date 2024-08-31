@@ -32,13 +32,15 @@ class Battle(pygame.sprite.Sprite):
         evsc: eventscene.EventScene,
         plsv: player.StatusView,
         sounds: sound.Sounds,
+        drawer,
     ) -> bool:
         # エンカウント
         basetime = time.time()
+        en_hp = en.hp
         is_timeout = True
         while basetime + 2 > time.time():
             self.draw(screen)
-            evsc.enemy_stat_upd(en)
+            evsc.enemy_stat_upd(en, en_hp)
             evsc.draw(screen)
             pygame.display.update()  # 画面を更新
             for event in pygame.event.get():
@@ -58,14 +60,14 @@ class Battle(pygame.sprite.Sprite):
             break
 
         # 戦闘
-        en_hp = en.hp
+
         print(int(en.exp * (pl.rebornnum + 1) * (pl.rebornnum + 1) * 0.3))
         if not is_timeout:
             # 自分の先制攻撃
             en_hp -= pl.atk
-            evsc.enemy_stat_upd(en)
-            evsc.draw(screen)
+            evsc.enemy_stat_upd(en, en_hp)
             sounds.se_atk.play()
+            drawer()
         else:
             print("timeout-battle")
         while True:
@@ -79,8 +81,8 @@ class Battle(pygame.sprite.Sprite):
             # 敵の攻撃
             pl.hp -= en.atk
             plsv.update(pl)
-            plsv.draw(screen)
             sounds.se_def.play()
+            drawer()
             if pl.hp <= 0:
                 print("dead")
                 # TODO dead
@@ -89,6 +91,6 @@ class Battle(pygame.sprite.Sprite):
             time.sleep(0.4)
             # 自分の攻撃
             en_hp -= pl.atk
-            evsc.enemy_stat_upd(en)
-            evsc.draw(screen)
+            evsc.enemy_stat_upd(en, en_hp)
             sounds.se_atk.play()
+            drawer()
