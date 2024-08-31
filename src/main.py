@@ -10,6 +10,7 @@ from pygame.locals import *
 
 import battle
 import enemy
+import eventscene
 import player
 import reborn
 import roulette
@@ -97,6 +98,9 @@ class Game:
     def make_backscreen(self):
         self.backscreen = tile.BackScreen("./asset/backscreen.png", 0, 100)
 
+    def make_eventscene(self):
+        self.eventscene = eventscene.EventScene(560, 160)
+
     def next(self):
         x = self.roulette.run(self.screen, self.sounds)
 
@@ -117,7 +121,12 @@ class Game:
                 self.sounds.play_se_btl()
                 self.sounds.se_btl.play()
                 self.is_dead = not self.battle.jamp(
-                    self.screen, self.player, self.enemies.enemies[self.player.nowtile]
+                    self.screen,
+                    self.player,
+                    self.enemies.enemies[self.player.nowtile],
+                    self.eventscene,
+                    self.statusview,
+                    self.sounds,
                 )
 
     def reborngame(self):
@@ -307,6 +316,7 @@ def main():
     game.make_battle("./asset/battle.png")
     game.make_reborn("./asset/reborn.png", 0, 100)
     game.make_sound()
+    game.make_eventscene()
     game.make_backscreen()
     while 1:
         if title.pushed_enter == 0:
