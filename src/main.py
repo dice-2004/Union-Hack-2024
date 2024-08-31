@@ -81,7 +81,7 @@ class Game:
         self.player = player.Player(name, x, y, level, rebornnum, is_load)
 
     def make_battle(self, name):
-        self.battle = battle.Battle(name, 200, 200)
+        self.battle = battle.Battle(name, 560, 200)
 
     def make_enemy(self):
         self.enemies = enemy.Enemies(self.tiles, enemy.ENEMY_CFGS)
