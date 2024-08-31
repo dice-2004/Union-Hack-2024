@@ -103,10 +103,12 @@ class Game:
         # for debug
         print(x)
 
-        next_tile = (self.player.nowtile + x) % self.tiles.num
-        self.player.move(*self.tiles.convert_pos(next_tile))
-        self.player.nowtile = next_tile
-        self.draw()
+        for _ in range(x):
+            next_tile = (self.player.nowtile + 1) % self.tiles.num
+            self.player.move(*self.tiles.convert_pos(next_tile))
+            self.player.nowtile = next_tile
+            self.draw()
+            time.sleep(0.2)
         match self.tile_effect[self.player.nowtile]:
             case tile.TileEffect.Basic:
                 pass
