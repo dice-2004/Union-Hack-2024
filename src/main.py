@@ -59,9 +59,11 @@ class Game:
         if is_load == 1:
             self.tileseed = seed
             self.tile_effect = tileefect
+            print("prevl ", self.tile_effect)
         else:
             self.tileseed = tile.Tiles.genseed(48, (550, 500))
             self.tile_effect = []
+            print("prev ", self.tile_effect)
         self.tiles = tile.Tiles(
             name, 48, x, y, self.tileseed, self.tile_effect, pe1, name1
         )
@@ -82,6 +84,7 @@ class Game:
 
     def make_enemy(self):
         self.enemies = enemy.Enemies(self.tiles, enemy.ENEMY_CFGS)
+        print("call makee enemey", self.enemies.enemies.keys())
 
     def make_statusview(self):
         self.statusview = player.StatusView(self.player, 10, 10)
@@ -123,7 +126,6 @@ class Game:
     def reborngame(self):
         self.is_dead = False
         self.player.reborn()
-        self.make_enemy()
         self.make_tiles(
             "./asset/tile_basic.png",
             0,
@@ -134,6 +136,7 @@ class Game:
             0,
             0,
         )
+        self.make_enemy()
 
     def draw(self):
         self.screen.fill((0, 0, 0))
