@@ -1,20 +1,23 @@
 import pygame
 import sys
 from pygame.locals import *
+from random import randint
+import time
 
 import sound
+
 
 SCR_RECT = Rect(0, 0, 800, 600)
 CAPTION = "test"
 FONT = "font/x12y16pxMaruMonica.ttf"
 
 # SAMPLE=[左上のｘ座標、左上のｙ座標、横幅、縦の幅]
-height = 50
-width = 150
+height = 80
+width = 200
 
-STA = [30, 250, width, height]
-CON = [STA[0] + STA[2] - 101, STA[1] + STA[3] + 10, width, height]
-END = [CON[0] + CON[2] - 101, CON[1] + CON[3] + 10, width, height]
+STA = [20, 270, width, height]
+CON = [STA[0] + STA[2] - 140, STA[1] + STA[3] + 10, width, height]
+END = [CON[0] + CON[2] - 140, CON[1] + CON[3] + 10, width, height]
 
 # COLOR
 SELECT = [0, 0, 255]
@@ -31,7 +34,13 @@ class Title:
         self.select = 0
         self.pushed_enter = 0
         self.sounds = sound.Sounds()
-        self.character = pygame.image.load("./asset/pl.png")
+        self.character = pygame.transform.scale(pygame.image.load("./asset/plb.png"),(200,200))
+        self.enemy = pygame.transform.scale(pygame.image.load("./asset/enemy.png"),(130,130))
+        self.back1 = pygame.transform.scale(pygame.image.load("./asset/grass1.bmp"),(40,40))
+        self.back2 = pygame.transform.scale(pygame.image.load("./asset/grass2.bmp"),(40,40))
+        self.rand = [[randint(1,3) for _ in range(15)] for _ in range(20)]
+        self.start = time.time()
+
         pygame.font.init()
 
     def draw(self):
@@ -40,18 +49,43 @@ class Title:
         colors = [N_SELECT, N_SELECT, N_SELECT]
         txts = ["はじめる", "続きから", "おわる"]
 
+        if (time.time()-self.start)>2:
+            self.rand = [[randint(1,3) for _ in range(15)] for _ in range(20)]
+            self.start = time.time()
+
         if self.select == 0:
             colors[0] = SELECT
         elif self.select == 1:
             colors[1] = SELECT
         elif self.select == 2:
             colors[2] = SELECT
-        self.draw_text(50, "ここにタイトルを入力", COL, self.screen, 30, 100)
-        self.screen.blit(self.character, (500, 300))
+
+
+        for x,i in zip(range(0,800,40),range(0,20)):
+            for y,j in zip(range(0,600,40),range(0,15)):
+
+                if not(self.rand[i][j]%3==0):
+                    self.screen.blit(self.back1,(x,y))
+                else:
+                    self.screen.blit(self.back2,(x,y))
+        txt_posx=300
+        txt_posy=30
+        pygame.draw.rect(self.screen,(0,0,0),(txt_posx-20,txt_posy,150,110))
+        pygame.draw.rect(self.screen,(0,0,0),(txt_posx+60-20,txt_posy+100,220,90))
+        self.draw_text(20, "り", COL, self.screen, txt_posx, txt_posy)
+        self.draw_text(20, "ん", COL, self.screen, txt_posx+50, txt_posy)
+        self.draw_text(20, "ね", COL, self.screen, txt_posx+100, txt_posy)
+        self.draw_text(80, "輪廻", COL, self.screen, txt_posx, txt_posy+20)
+        self.draw_text(80, "ループ", COL, self.screen, txt_posx+60, txt_posy+100)
+        self.screen.blit(self.character, (340, 370))
+        self.screen.blit(self.enemy,(600,280))
+
+
+
 
         for rect, color, txt in zip(rects, colors, txts):
             pygame.draw.rect(self.screen, color, rect)
-            self.draw_text(25, txt, COL, self.screen, rect[0] + 10, rect[1] + 5)
+            self.draw_text(50, txt, COL, self.screen, rect[0] + 20, rect[1] + 10)
         pygame.display.update()
 
     def update(self):
