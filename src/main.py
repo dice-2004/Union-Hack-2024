@@ -98,7 +98,7 @@ class Game:
         next_tile = (self.player.nowtile + x) % self.tiles.num
         self.player.move(*self.tiles.convert_pos(next_tile))
         self.player.nowtile = next_tile
-
+        self.draw()
         match self.tile_effect[self.player.nowtile]:
             case tile.TileEffect.Basic:
                 pass
