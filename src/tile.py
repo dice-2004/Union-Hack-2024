@@ -61,6 +61,10 @@ class Tiles:
         # TODO バリデーション
         self.size = size
         self.num = 1
+        self.tiles = []
+        self.effects = []
+        self.xs = []
+        self.ys = []
         self.xs.append(x)
         self.ys.append(y)
 
@@ -144,7 +148,7 @@ class Tiles:
 
         print(f"{res=}")
         return res
-     
+
     def loadfmt(load: dict) -> list:
         elist = []
         for i in range(50):
@@ -153,6 +157,11 @@ class Tiles:
             else:
                 elist.append(TileEffect.Battle)
         return elist
+
+    def __del__(self):
+        for i in range(self.num):
+            del self.tiles[i]
+
 
 class BackScreen(pygame.sprite.Sprite):
     def __init__(self, name, x, y):
@@ -167,4 +176,3 @@ class BackScreen(pygame.sprite.Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
-
