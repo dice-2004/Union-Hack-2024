@@ -52,7 +52,7 @@ class Game:
         pe1: float,
         name1: str,
         seed: str,
-        tileefect: list[tile.TileEffect],
+        tileefect: list[tile.TileEffect] | dict,
         is_load: int,
     ):
         if is_load == 1:
@@ -66,7 +66,7 @@ class Game:
         )
 
         # for debug
-        print(self.tile_effect)
+        print("aaa ", self.tile_effect)
 
     def make_roulette(self):
         self.roulette = roulette.Roulette(
@@ -320,10 +320,11 @@ def main():
                         0.5,
                         "./asset/tile_battle.png",
                         seed,
-                        tileeff,
+                        tile.Tiles.loadfmt(tileeff),
                         1,
                     )
                     game.make_enemy()
+                    game.enemies.loadfmt(tileeff, game.tiles)
                     game.make_player("./asset/pl.png", 0, 100, level, reburn, 1)
                     game.make_statusview()
                     simple = 1
