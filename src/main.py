@@ -194,7 +194,6 @@ class Game:
 
         return wapper
 
-    # 正常終了 -> 0 異常終了 -> 1
     @FILE_OPE
     def save(self):
         # プレイヤーレベル・周回回数・転生回数・シード値
