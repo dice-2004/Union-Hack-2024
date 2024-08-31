@@ -1,3 +1,4 @@
+import copy
 import random
 import typing
 from enum import Enum, auto
@@ -94,7 +95,7 @@ class Tiles:
                     self.effects.append(TileEffect.Battle)
         else:
             for i in range(self.num):
-                if str(i) not in elist:
+                if elist[i] == TileEffect.Basic:
                     self.tiles.append(Tile(name0, self.xs[i], self.ys[i]))
                     self.effects.append(TileEffect.Basic)
                 else:
@@ -143,7 +144,15 @@ class Tiles:
 
         print(f"{res=}")
         return res
-
+     
+    def loadfmt(load: dict) -> list:
+        elist = []
+        for i in range(50):
+            if f"{i}" not in load:
+                elist.append(TileEffect.Basic)
+            else:
+                elist.append(TileEffect.Battle)
+        return elist
 
 class BackScreen(pygame.sprite.Sprite):
     def __init__(self, name, x, y):
@@ -158,3 +167,4 @@ class BackScreen(pygame.sprite.Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+
