@@ -67,7 +67,7 @@ class Enemies:
             probs.append(prob)
 
         # print(probs[len(probs) - 1])
-
+        print("tiles.eff", tiles.effects)
         for tile_index in range(tiles.num):
             if tiles.effects[tile_index] == tile.TileEffect.Battle:
                 seed = random.uniform(0, probs[len(probs) - 1])
@@ -99,6 +99,9 @@ class Enemies:
             x, y = tiles.convert_pos(int(key))
             print(load[key][0])
             self.enemies[int(key)] = Enemy(cfg, x, y, load[key][0])
+
+    def __del__(self):
+        del self.enemies
 
 
 ENEMY_CFGS = [
