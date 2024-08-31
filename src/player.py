@@ -4,7 +4,7 @@ FONT = "font/x12y16pxMaruMonica.ttf"
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, name, x, y,level,rebornnum,is_load):
+    def __init__(self, name, x, y, level, rebornnum, is_load):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(name).convert_alpha()
         self.rect = self.image.get_rect()
@@ -12,14 +12,14 @@ class Player(pygame.sprite.Sprite):
         self.direction = 0
         self.nowtile = 0
         self.exp = 0
-        if is_load==1:
-            self.rebornnum = rebornnum #ここ
-            self.lv = level #ここ
+        if is_load == 1:
+            self.rebornnum = rebornnum  # ここ
+            self.lv = level  # ここ
             self.atk = self.lv * 2 + 1
             self.hp = self.lv * 4 + 6
         else:
-            self.rebornnum = 0 #ここ
-            self.lv = 1 #ここ
+            self.rebornnum = 0  # ここ
+            self.lv = 1  # ここ
             self.hp = 10
             self.atk = 3
 
@@ -27,8 +27,8 @@ class Player(pygame.sprite.Sprite):
         if self.lv * self.lv * 3 < self.exp:
             self.lv += 1
             self.exp = 0
+            self.hp = self.lv * 4 + 6
         self.atk = self.lv * 2 + 1
-        self.hp = self.lv * 4 + 6
         # TODO level up scene
 
     def move(self, x: int, y: int):
