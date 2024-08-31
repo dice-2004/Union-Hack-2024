@@ -5,6 +5,8 @@ SE_CUR = "./asset/se/決定ボタンを押す31.mp3"
 SE_SEL = "./asset/se/決定ボタンを押す38.mp3"
 SE_RLT = "./asset/se/カーソル移動12.mp3"
 SE_BTL = "./asset/se/高速移動.mp3"
+SE_ATK = "./asset/se/剣で斬る2.mp3"
+SE_DEF = "./asset/se/盾で防御.mp3"
 
 
 class Sounds:
@@ -15,6 +17,8 @@ class Sounds:
         self.se_sel = pygame.mixer.Sound(SE_SEL)
         self.se_rlt = pygame.mixer.Sound(SE_RLT)
         self.se_btl = pygame.mixer.Sound(SE_BTL)
+        self.se_atk = pygame.mixer.Sound(SE_ATK)
+        self.se_def = pygame.mixer.Sound(SE_DEF)
 
     def mainbgm(self):
         pygame.mixer.music.load(MAIN_BGM)
