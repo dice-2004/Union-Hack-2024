@@ -13,6 +13,7 @@ import enemy
 import player
 import reborn
 import roulette
+import sound
 import tile
 from game_title import Title
 
@@ -88,6 +89,10 @@ class Game:
     def make_reborn(self, name: str, x: int, y: int):
         self.is_dead = False
         self.reborn = reborn.Reborn(name, x, y)
+
+    def make_sound(self):
+        self.sounds = sound.Sounds()
+        self.sounds.mainbgm()
 
     def next(self):
         x = self.roulette.run(self.screen)
@@ -243,13 +248,16 @@ class Game:
                     print("up_M")
                     if self.select != 0:
                         self.select -= 1
+                        self.sounds.play_se_cur()
                 elif event.key == K_DOWN or event.key == K_KP2:
                     print("dwn_M")
                     if self.select != 2:
                         self.select += 1
+                        self.sounds.play_se_cur()
                 elif event.key == K_KP_ENTER or event.key == K_RETURN:
                     print("ent_M")
                     self.pushed_enter = 1
+                    self.sounds.play_se_sel()
 
     def draw_text(self, siz, txt, col, sc, x, y):
         fnt = pygame.font.Font(FONT, siz)
@@ -285,6 +293,7 @@ def main():
     game.make_roulette()
     game.make_battle("./asset/battle.png")
     game.make_reborn("./asset/reborn.png", 0, 100)
+    game.make_sound()
     while 1:
         if title.pushed_enter == 0:
             title.draw()
