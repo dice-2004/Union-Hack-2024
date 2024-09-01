@@ -1,8 +1,8 @@
 import pygame
 
 import enemy
-
-FONT = "font/x12y16pxMaruMonica.ttf"
+from res import resource_path
+FONT = resource_path("font/x12y16pxMaruMonica.ttf")
 
 
 class EventScene:

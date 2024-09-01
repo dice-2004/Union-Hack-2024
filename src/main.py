@@ -4,7 +4,6 @@ import pygame
 import json
 import time
 
-
 from pygame.locals import *
 
 
@@ -17,6 +16,7 @@ import roulette
 import sound
 import tile
 from game_title import Title
+from res import resource_path
 
 width = 250
 height = 50
@@ -33,9 +33,9 @@ SCR_RECT = Rect(0, 0, 800, 600)
 
 CAPTION = "test"
 
-SAVEFILE = "files/savedata.json"
-ERRORLOG = "files/error.log"
-FONT = "font/x12y16pxMaruMonica.ttf"
+SAVEFILE = resource_path("files/savedata.json")
+ERRORLOG = resource_path("files/error.log")
+FONT = resource_path("font/x12y16pxMaruMonica.ttf")
 
 
 
@@ -75,7 +75,7 @@ class Game:
 
     def make_roulette(self):
         self.roulette = roulette.Roulette(
-            "./asset/roulette_000.png", 550, 5, "./asset/roulette_001.png", 550, 0
+            resource_path("asset/roulette_000.png"), 550, 5, resource_path("asset/roulette_001.png"), 550, 0
         )
 
     def make_player(self, name, x, y, level, rebornnum, is_load):
@@ -99,7 +99,7 @@ class Game:
         self.sounds.mainbgm()
 
     def make_backscreen(self):
-        self.backscreen = tile.BackScreen("./asset/backscreen.png", 0, 100)
+        self.backscreen = tile.BackScreen(resource_path("asset/backscreen.png"), 0, 100)
 
     def make_eventscene(self):
         self.eventscene = eventscene.EventScene(560, 160)
@@ -138,11 +138,11 @@ class Game:
         self.player.reborn()
         self.make_enemy()
         self.make_tiles(
-            "./asset/tile_basic.png",
+            resource_path("asset/tile_basic.png"),
             0,
             100,
             0.5,
-            "./asset/tile_battle.png",
+            resource_path("asset/tile_battle.png"),
             0,
             0,
             0,
@@ -156,8 +156,8 @@ class Game:
             self.enemies.draw(self.screen)
             self.player.draw(self.screen)
         elif self.is_dead:
-            enemy_img = pygame.transform.scale(pygame.image.load("./asset/enemy.png"),(130,130))
-            cha=self.character = pygame.transform.scale(pygame.image.load("./asset/plb.png"),(150,150))
+            enemy_img = pygame.transform.scale(pygame.image.load(resource_path("asset/enemy.png")),(130,130))
+            cha=self.character = pygame.transform.scale(pygame.image.load(resource_path("asset/plb.png")),(150,150))
 
             if self.start==None:
                 print("www")
@@ -341,8 +341,8 @@ def main():
     title = Title()
     game = Game()
     game.make_roulette()
-    game.make_battle("./asset/battle.png")
-    game.make_reborn("./asset/reborn.png", 0, 100)
+    game.make_battle(resource_path("asset/battle.png"))
+    game.make_reborn(resource_path("asset/reborn.png"), 0, 100)
     game.make_sound()
     game.make_eventscene()
     game.make_backscreen()
@@ -355,17 +355,17 @@ def main():
             if title.select == 0:
                 if simple == 0:
                     game.make_tiles(
-                        "./asset/tile_basic.png",
+                        resource_path("asset/tile_basic.png"),
                         0,
                         100,
                         0.5,
-                        "./asset/tile_battle.png",
+                        resource_path("asset/tile_battle.png"),
                         0,
                         0,
                         0,
                     )
                     game.make_enemy()
-                    game.make_player("./asset/pl.png", 0, 100, 0, 0, 0)
+                    game.make_player(resource_path("asset/pl.png"), 0, 100, 0, 0, 0)
                     game.make_statusview()
                     simple = 1
                 game.draw()
@@ -375,18 +375,18 @@ def main():
                     level, reburn, seed, exp, plpos, tileeff = game.load()
                     print(type(seed), tileeff)
                     game.make_tiles(
-                        "./asset/tile_basic.png",
+                        resource_path("asset/tile_basic.png"),
                         0,
                         100,
                         0.5,
-                        "./asset/tile_battle.png",
+                        resource_path("asset/tile_battle.png"),
                         seed,
                         tile.Tiles.loadfmt(tileeff),
                         1,
                     )
                     game.make_enemy()
                     game.enemies.loadfmt(tileeff, game.tiles)
-                    game.make_player("./asset/pl.png", 0, 100, level, reburn, 1)
+                    game.make_player(resource_path("asset/pl.png"), 0, 100, level, reburn, 1)
                     game.player.exp = exp
                     game.player.move(*game.tiles.convert_pos(plpos))
                     game.player.nowtile = plpos

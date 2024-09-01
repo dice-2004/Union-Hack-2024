@@ -5,11 +5,11 @@ from random import randint
 import time
 
 import sound
-
+from res import resource_path
 
 SCR_RECT = Rect(0, 0, 800, 600)
 CAPTION = "test"
-FONT = "font/x12y16pxMaruMonica.ttf"
+FONT = resource_path("font/x12y16pxMaruMonica.ttf")
 
 # SAMPLE=[左上のｘ座標、左上のｙ座標、横幅、縦の幅]
 height = 80
@@ -34,10 +34,10 @@ class Title:
         self.select = 0
         self.pushed_enter = 0
         self.sounds = sound.Sounds()
-        self.character = pygame.transform.scale(pygame.image.load("./asset/plb.png"),(200,200))
-        self.enemy = pygame.transform.scale(pygame.image.load("./asset/enemy.png"),(130,130))
-        self.back1 = pygame.transform.scale(pygame.image.load("./asset/grass1.bmp"),(40,40))
-        self.back2 = pygame.transform.scale(pygame.image.load("./asset/grass2.bmp"),(40,40))
+        self.character = pygame.transform.scale(pygame.image.load(resource_path("asset/plb.png")),(200,200))
+        self.enemy = pygame.transform.scale(pygame.image.load(resource_path("asset/enemy.png")),(130,130))
+        self.back1 = pygame.transform.scale(pygame.image.load(resource_path("asset/grass1.bmp")),(40,40))
+        self.back2 = pygame.transform.scale(pygame.image.load(resource_path("asset/grass2.bmp")),(40,40))
         self.rand = [[randint(1,3) for _ in range(15)] for _ in range(20)]
         self.start = time.time()
 

@@ -1,12 +1,13 @@
 import pygame.mixer
 
-MAIN_BGM = "./asset/bgm/MusMus-BGM-163.mp3"
-SE_CUR = "./asset/se/決定ボタンを押す31.mp3"
-SE_SEL = "./asset/se/決定ボタンを押す38.mp3"
-SE_RLT = "./asset/se/カーソル移動12.mp3"
-SE_BTL = "./asset/se/高速移動.mp3"
-SE_ATK = "./asset/se/剣で斬る2.mp3"
-SE_DEF = "./asset/se/盾で防御.mp3"
+from res import resource_path
+MAIN_BGM = resource_path("asset/bgm/MusMus-BGM-163.mp3")
+SE_CUR = resource_path("asset/se/決定ボタンを押す31.mp3")
+SE_SEL = resource_path("asset/se/決定ボタンを押す38.mp3")
+SE_RLT = resource_path("asset/se/カーソル移動12.mp3")
+SE_BTL = resource_path("asset/se/高速移動.mp3")
+SE_ATK = resource_path("asset/se/剣で斬る2.mp3")
+SE_DEF = resource_path("asset/se/盾で防御.mp3")
 
 
 class Sounds:
